@@ -1,0 +1,48 @@
+.kotcscconfiguration-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    gap: 10px;
+}
+
+.kotcscconfiguration-input-group {
+    display: flex;
+    align-items: center;
+}
+
+.kotcscconfiguration-input-group label {
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.kotcscconfiguration-input-group input {
+    width: 50px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.kotcscconfiguration-createschedule-button {
+    padding: 10px 20px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    box-sizing: border-box;
+    border-radius: 4px; /* Optional: for rounded corners */
+    font-size: 16px;
+}
+
+.kotcscconfiguration-createschedule-button:hover {
+    background-color: #0056b3;
+}
+
+.kotcscconfiguration-info {
+    font-weight: bold;
+}
+
+.kotcscconfiguration-schedulepreview {
+    
+}

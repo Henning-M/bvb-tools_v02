@@ -1,0 +1,53 @@
+.kotcschedulecreator-container {
+    margin-top: 10vh; /* Making space for Nav */
+    height: 90vh; /* Adjust height to fit the viewport minus the nav space */
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 80vh;
+    gap: 5px;
+    grid-template-areas:
+      "page-header"
+      "page-body-nav"
+      "page-body";
+}
+
+.kotcschedulecreator-page-header {
+    grid-area: page-header;
+    text-align: center;
+}
+
+.kotcschedulecreator-page-body-nav {
+    grid-area: page-body-nav;
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    margin: 0;
+    padding: 0;
+}
+
+.kotcschedulecreator-page-body-nav ul {
+    list-style-type: none; /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.kotcschedulecreator-page-body-nav li {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 1px solid black; /* Optional: adds border to buttons */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.kotcschedulecreator-page-body-nav li.selected {
+    background-color: darkgray; /* Dark background for selected item */
+    color: white; /* White text for selected item */
+}
+
+/* Optional: hover effect */
+.kotcschedulecreator-page-body-nav li:hover {
+    background-color: lightgray;
+}
+
+.kotcschedulecreator-page-body { grid-area: page-body; }

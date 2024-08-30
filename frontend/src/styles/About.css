@@ -1,0 +1,28 @@
+.about-container {
+    text-align: center;
+    padding: 20px;
+    margin-top: 10vh; /* Making space for Nav */
+}
+
+.about-faq {
+    max-width: 800px; /* Limits the width of the FAQ section for better readability */
+    margin: 0 auto; /* Centers the FAQ section */
+    text-align: left; /* Aligns text to the left for easier reading */
+}
+
+.about-faq-item {
+    margin-bottom: 20px; /* Adds space between FAQ items */
+    padding: 10px;
+    border-bottom: 1px solid #ddd; /* Adds a border below each FAQ item */
+}
+
+.about-faq-question {
+    font-size: 18px; /* Makes the question font slightly larger */
+    font-weight: bold; /* Highlights the questions */
+    margin: 0; /* Removes default margin */
+}
+
+.about-faq-answer {
+    font-size: 16px; /* Makes the answer font slightly smaller than the question */
+    margin: 10px 0 0 0; /* Adds margin to separate answers from questions */
+}
