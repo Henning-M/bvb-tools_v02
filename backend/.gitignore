@@ -1,0 +1,15 @@
+# Ignore environment files
+.env
+
+# Node modules directory
+node_modules/
+
+# Logs
+*.log
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Package lock files
+package-lock.json
