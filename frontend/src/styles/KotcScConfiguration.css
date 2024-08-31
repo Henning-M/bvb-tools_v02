@@ -23,21 +23,39 @@
     border-radius: 4px;
 }
 
-.kotcscconfiguration-createschedule-button {
+.kotcscconfiguration-createschedule-button,
+.kotcscconfiguration-submitschedule-button {
     padding: 10px 20px;
+    margin: 20px;
     background-color: #007bff;
     color: white;
     border: none;
     cursor: pointer;
     width: auto;
     box-sizing: border-box;
-    border-radius: 4px; /* Optional: for rounded corners */
+    border-radius: 4px;
     font-size: 16px;
+    transition: all 0.3s ease;
 }
 
-.kotcscconfiguration-createschedule-button:hover {
+.kotcscconfiguration-createschedule-button:hover,
+.kotcscconfiguration-submitschedule-button:hover {
     background-color: #0056b3;
 }
+
+/* New styles for inactive buttons */
+.kotcscconfiguration-createschedule-button.inactive,
+.kotcscconfiguration-submitschedule-button.inactive {
+    background-color: #e0e0e0;
+    color: #a0a0a0;
+    border: 1px solid #c0c0c0;
+}
+
+.kotcscconfiguration-createschedule-button.inactive:hover,
+.kotcscconfiguration-submitschedule-button.inactive:hover {
+    background-color: #d0d0d0;
+}
+
 
 .kotcscconfiguration-info {
     font-weight: bold;

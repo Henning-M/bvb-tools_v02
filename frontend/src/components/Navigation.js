@@ -12,6 +12,7 @@ function Navigation() {
                     <li onClick={() => navigate('/')}>Home</li>
                     <li onClick={() => navigate('/team-registration')}>Team Registration</li>
                     <li onClick={() => navigate('/kotc-schedule-creator')}>KOTC Schedule Creator</li>
+                    <li onClick={() => navigate('/kotc-tournament-home')}>KOTC Tournament</li>
                     <li onClick={() => navigate('/about')}>About</li>
                 </ul>
             </nav>

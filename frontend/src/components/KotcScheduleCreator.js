@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Navigation from './Navigation';
 import KotcScTeams from './KotcScTeams';
 import KotcScConfiguration from './KotcScConfiguration';
-import KotcScSchedule from './KotcScSchedule';
 import '../styles/KotcScheduleCreator.css';
 
 function KotcScheduleCreator () {
@@ -19,8 +18,6 @@ function KotcScheduleCreator () {
                 return <KotcScTeams />;
             case 1:
                 return <KotcScConfiguration />;
-            case 2:
-                return <KotcScSchedule />;
             default:
                 return null;
         }
@@ -42,11 +39,6 @@ function KotcScheduleCreator () {
                         className={selectedIndex === 1 ? 'selected' : ''}
                         onClick={() => handleClick(1)}>
                             Configuration
-                    </li>
-                    <li
-                        className={selectedIndex === 2 ? 'selected' : ''}
-                        onClick={() => handleClick(2)}>
-                            Schedule
                     </li>
                 </ul>
             </div>

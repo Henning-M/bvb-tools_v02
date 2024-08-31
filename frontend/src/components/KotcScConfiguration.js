@@ -55,24 +55,26 @@ function KotcScConfiguration () {
     const createGroups = (teams, g) => {
         let shuffledTeams = [...teams].sort(() => 0.5 - Math.random());
         let groupSizesArr = [];
-
-        let groupSize1 = Math.floor(teams.length / g);
-        let groupSize2 = groupSize1 + (teams.length % g);
-
+    
+        // Calculate the base size and remainder
+        let baseSize = Math.floor(teams.length / g);
+        let remainder = teams.length % g;
+    
+        // Distribute teams as evenly as possible
         for (let i = 0; i < g; i++) {
-            groupSizesArr.push(i < teams.length % g ? groupSize2 : groupSize1);
+            groupSizesArr.push(baseSize + (i < remainder ? 1 : 0));
         }
-
+    
         let groups = Array.from({ length: g }, () => []);
         let index = 0;
-
+    
         shuffledTeams.forEach(team => {
             groups[index].push(team);
             if (groups[index].length === groupSizesArr[index]) index++;
         });
-
+    
         groups = groups.map(group => group.sort((a, b) => a.id - b.id));
-
+    
         return { groups };
     };
 
@@ -187,15 +189,23 @@ function KotcScConfiguration () {
             <div className="kotcscconfiguration-info">
                 <p>Number of participating teams: {teams.length}</p>
             </div>
-            <button className="kotcscconfiguration-createschedule-button"
-                    onClick={handleCreateSchedule}>
-                    Create schedule
+            <div className="kotcscconfiguration-buttons">
+            <button 
+                className={`kotcscconfiguration-createschedule-button ${schedule.length > 0 ? 'inactive' : ''}`}
+                onClick={handleCreateSchedule}>
+                Create schedule
             </button>
-            
+            <button 
+                className={`kotcscconfiguration-submitschedule-button ${schedule.length === 0 ? 'inactive' : ''}`}
+                // onClick={handleSubmitSchedule} // Assuming you have a function to handle submit
+            >
+                Submit schedule
+            </button>
+            </div>
             <div className="kotcscconfiguration-schedulepreview">
                 {schedule.length > 0 && (
                     <p>
-                        This is a schedule PREVIEW.
+                        This is a schedule PREVIEW. Click "Submit schedule" to save.
                     </p> // The schedule can be re-shuffled at will by clicking the "Create schedule" button again. To start playing with this schedule, use the "Submit schedule" button. That will load the schedule into the database and prepare if for entering results etc..
                 )}
                 {schedule.length > 0 ? (

@@ -33,13 +33,43 @@ function TeamRegistration() {
         fetchTeams();
     }, []);
 
+    // New function to fetch all players
+    const fetchAllPlayers = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/players');
+            if (!response.ok) {
+                throw new Error('Failed to fetch players');
+            }
+            return await response.json();
+        } catch (error) {
+            console.error('Error fetching players:', error);
+            return [];
+        }
+    };
+
     // Compute the team name based on player inputs
     const teamName = `${player1Name} / ${player2Name}`;
 
     // Handle the register button click
     const handleRegister = async () => {
-        if (!player1Name || !player2Name || player1Name === player2Name) {
-            alert('Please only register with TWO DIFFERENT players');
+        if (!player1Name || !player2Name) {
+            alert('Please enter names for both players');
+            return;
+        }
+
+        if (player1Name === player2Name) {
+            alert('Please enter different names for each player');
+            return;
+        }
+
+        // Fetch all existing players
+        const existingPlayers = await fetchAllPlayers();
+        const existingPlayerNames = existingPlayers.map(player => player.name.toLowerCase());
+
+        // Check if either player name already exists
+        if (existingPlayerNames.includes(player1Name.toLowerCase()) || 
+            existingPlayerNames.includes(player2Name.toLowerCase())) {
+            alert('One or both player names already exist. Please use new player names.');
             return;
         }
 

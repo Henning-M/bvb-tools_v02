@@ -33,7 +33,7 @@ app.put('/players', async (req, res) => {
 });
 
 // GET - Retrieve a Player by ID
-app.get('/players/:id', async (req, res) => {
+app.get('/players/id/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
@@ -54,7 +54,7 @@ app.get('/players/:id', async (req, res) => {
 });
 
 // GET - Retrieve a Player by Name
-app.get('/players/:name', async (req, res) => {
+app.get('/players/name/:name', async (req, res) => {
     const { name } = req.params;
 
     try {
@@ -74,22 +74,50 @@ app.get('/players/:name', async (req, res) => {
     }
 });
 
-// DELETE - Remove a Player by ID
-app.delete('/players/:id', async (req, res) => {
+// GET - Retrieve All Players
+app.get('/players', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT id, name FROM players');
+        res.json(result.rows);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// DELETE - Remove a Player (and their teammate if they're in a team)
+app.delete('/players/id/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query(
-            'DELETE FROM players WHERE id = $1 RETURNING id',
+        // Start a transaction
+        await pool.query('BEGIN');
+
+        // Find the team of the player
+        const teamResult = await pool.query(
+            'SELECT player1, player2 FROM teams WHERE player1 = $1 OR player2 = $1',
             [id]
         );
 
-        if (result.rowCount === 0) {
-            return res.status(404).json({ error: 'Player not found' });
+        if (teamResult.rows.length > 0) {
+            const team = teamResult.rows[0];
+            const otherPlayerId = team.player1 == id ? team.player2 : team.player1;
+
+            // Delete the other player
+            await pool.query('DELETE FROM players WHERE id = $1', [otherPlayerId]);
         }
 
-        res.json({ message: 'Player deleted', id: result.rows[0].id });
+        // Delete the original player
+        // This will automatically delete the team due to ON DELETE CASCADE
+        await pool.query('DELETE FROM players WHERE id = $1', [id]);
+
+        // Commit the transaction
+        await pool.query('COMMIT');
+
+        res.json({ message: 'Player and associated data deleted successfully' });
     } catch (err) {
+        // If there's an error, roll back the transaction
+        await pool.query('ROLLBACK');
         console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
@@ -154,17 +182,41 @@ app.delete('/teams/:id', async (req, res) => {
     const { id } = req.params;
 
     try {
-        const result = await pool.query(
+        // Start a transaction
+        await pool.query('BEGIN');
+
+        // Query to get player1 and player2 IDs of the team to be deleted
+        const playerResult = await pool.query(
+            'SELECT player1, player2 FROM teams WHERE id = $1',
+            [id]
+        );
+
+        if (playerResult.rowCount === 0) {
+            await pool.query('ROLLBACK');
+            return res.status(404).json({ error: 'Team not found' });
+        }
+
+        const { player1, player2 } = playerResult.rows[0];
+
+        // Delete the team
+        const teamDeleteResult = await pool.query(
             'DELETE FROM teams WHERE id = $1 RETURNING id',
             [id]
         );
 
-        if (result.rowCount === 0) {
-            return res.status(404).json({ error: 'Team not found' });
-        }
+        // Delete both players
+        await pool.query(
+            'DELETE FROM players WHERE id = $1 OR id = $2',
+            [player1, player2]
+        );
 
-        res.json({ message: 'Team deleted', id: result.rows[0].id });
+        // Commit the transaction
+        await pool.query('COMMIT');
+
+        res.json({ message: 'Team and associated players deleted', id: teamDeleteResult.rows[0].id });
     } catch (err) {
+        // If there's an error, roll back the transaction
+        await pool.query('ROLLBACK');
         console.error(err);
         res.status(500).json({ error: 'Server error' });
     }
