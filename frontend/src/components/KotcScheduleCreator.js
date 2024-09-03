@@ -15,9 +15,9 @@ function KotcScheduleCreator () {
     const renderContent = () => {
         switch (selectedIndex) {
             case 0:
-                return <KotcScTeams />;
-            case 1:
                 return <KotcScConfiguration />;
+            case 1:
+                return <KotcScTeams />;
             default:
                 return null;
         }
@@ -33,12 +33,12 @@ function KotcScheduleCreator () {
                     <li
                         className={selectedIndex === 0 ? 'selected' : ''}
                         onClick={() => handleClick(0)}>
-                        Teams
+                        Configuration
                     </li>
                     <li
                         className={selectedIndex === 1 ? 'selected' : ''}
                         onClick={() => handleClick(1)}>
-                            Configuration
+                            Teams
                     </li>
                 </ul>
             </div>

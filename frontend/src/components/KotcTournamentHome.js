@@ -1,18 +1,57 @@
-import React from "react";
+import React, { useState } from "react";
 import Navigation from './Navigation';
+import KotcHFixtures from './KotcHFixtures';
+import KotcHRanking from './KotcHRanking';
 import '../styles/KotcTournamentHome.css';
 
 function KotcTournamentHome () {
+
+    const [selectedIndex, setSelectedIndex] = useState(0);
+
+    const handleClick = (index) => {
+        setSelectedIndex(index);
+    };
+
+    const renderContent = () => {
+        switch (selectedIndex) {
+            case 0:
+                return <KotcHFixtures />;
+            case 1:
+                return <KotcHRanking />;
+            case 2:
+                return 
+            default:
+                return null;
+        }
+    };
 
     return (
         <div>
         <Navigation />
         <div className="kotctournamenthome-container">
-            Two tabs. Schedule & results as a table, input field to enter points per team, submit button per round;
-            below timestamp print when results were saved successfully;
-            <br/><br/>
-            Ranking as list. Rank | Team name | Points Round #1 | column for each round | total points (sum);
-            define tiebreakers (this way no logic to display two teams in same rank needed)
+        {/* <div className="kotctournamenthome-page-header"><h1>KOTC Tournament Home</h1></div> */}
+        <div className="kotctournamenthome-page-body-nav">
+            <ul>
+                <li
+                    className={selectedIndex === 0 ? 'selected' : ''}
+                    onClick={() => handleClick(0)}>
+                    Fixtures & Score Entry
+                </li>
+                <li
+                    className={selectedIndex === 1 ? 'selected' : ''}
+                    onClick={() => handleClick(1)}>
+                    Ranking
+                </li>
+                <li
+                    className={selectedIndex === 1 ? 'selected' : ''}
+                    onClick={() => handleClick(1)}>
+                    Full Schedule
+                </li>
+            </ul>
+        </div>
+        <div className="kotctournamenthome-page-body">
+            {renderContent()}
+        </div>
         </div>
         </div>
     )

@@ -1,0 +1,58 @@
+.kotchfixtures-container {
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 80% auto;
+    gap: 5px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "kotchfixtures-roundnav"
+      "kotchfixtures-roundbody"
+      "kotchfixtures-roundfooter";
+  }
+  
+
+  /* ############ ROUNDNAV STYLES ############ */
+
+.kotchfixtures-roundnav {
+    grid-area: kotchfixtures-roundnav;
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    margin: 0;
+    padding: 0;
+}
+
+.kotchfixtures-roundnav ul {
+    list-style-type: none; /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.kotchfixtures-roundnav li {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 1px solid black; /* Optional: adds border to buttons */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.kotchfixtures-roundnav li.selected {
+    background-color: darkgray; /* Dark background for selected item */
+    color: white; /* White text for selected item */
+}
+
+.kotchfixtures-roundnav li:hover {
+    background-color: lightgray;
+}
+
+
+/* ############ ROUNDBODY STYLES - not relevant, will be separate component ############ */
+  
+.kotchfixtures-roundbody { grid-area: kotchfixtures-roundbody; }
+
+
+/* ############ ROUNDFOOTER STYLES - might be removed after all - close round button to be in round component ############ */
+
+.kotchfixtures-roundfooter { grid-area: kotchfixtures-roundfooter; }
+  

@@ -27,7 +27,21 @@
 .kotcscconfiguration-submitschedule-button {
     padding: 10px 20px;
     margin: 20px;
-    background-color: #007bff;
+    background-color: #007bff; /* Active state */
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.kotcscconfiguration-clearschedule-button {
+    padding: 10px 20px;
+    margin: 20px;
+    background-color: red; /* Active state */
     color: white;
     border: none;
     cursor: pointer;
@@ -40,27 +54,44 @@
 
 .kotcscconfiguration-createschedule-button:hover,
 .kotcscconfiguration-submitschedule-button:hover {
-    background-color: #0056b3;
+    background-color: #0056b3; /* Darker shade for hover effect */
 }
 
-/* New styles for inactive buttons */
+.kotcscconfiguration-clearschedule-button:hover {
+    background-color: rgb(192, 0, 0); /* Darker shade for hover effect */
+}
+
+/* Styles for visually-inactive buttons */
+.kotcscconfiguration-createschedule-button.visually-inactive,
+.kotcscconfiguration-submitschedule-button.visually-inactive,
+.kotcscconfiguration-clearschedule-button.visually-inactive {
+    background-color: #e0e0e0; /* Light gray for visually-inactive */
+    color: #a0a0a0; /* Gray text */
+    border: 1px solid #c0c0c0; /* Light border */
+}
+
+/* Styles for inactive buttons */
 .kotcscconfiguration-createschedule-button.inactive,
-.kotcscconfiguration-submitschedule-button.inactive {
-    background-color: #e0e0e0;
-    color: #a0a0a0;
-    border: 1px solid #c0c0c0;
+.kotcscconfiguration-submitschedule-button.inactive,
+.kotcscconfiguration-clearschedule-button.inactive {
+    background-color: #e0e0e0; /* Same as visually-inactive */
+    color: #a0a0a0; /* Gray text */
+    border: 1px solid #c0c0c0; /* Light border */
+    cursor: not-allowed; /* Change cursor to indicate it's not clickable */
 }
 
-.kotcscconfiguration-createschedule-button.inactive:hover,
-.kotcscconfiguration-submitschedule-button.inactive:hover {
-    background-color: #d0d0d0;
+/* Hover effect for visually-inactive buttons */
+.kotcscconfiguration-createschedule-button.visually-inactive:hover,
+.kotcscconfiguration-submitschedule-button.visually-inactive:hover,
+.kotcscconfiguration-clearschedule-button.visually-inactive:hover {
+    background-color: #d0d0d0; /* Slightly darker gray */
 }
 
-
+/* Additional styles for the info section */
 .kotcscconfiguration-info {
     font-weight: bold;
 }
 
-.kotcscconfiguration-schedulepreview {
+/* .kotcscconfiguration-schedulepreview {
     
-}
+} */

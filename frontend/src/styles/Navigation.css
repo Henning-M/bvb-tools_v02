@@ -1,4 +1,4 @@
-.navigation {
+.navigation-container {
     position: fixed;
     top: 0;
     left: 0;
@@ -25,4 +25,30 @@ nav ul li {
 
 nav ul li:hover {
     text-decoration: underline;
+}
+
+/* Active state */
+nav ul li.active {
+    color: white; /* Default active color */
+}
+
+/* Visually-inactive state */
+nav ul li.visually-inactive {
+    color: #888;
+    opacity: 0.7;
+}
+
+nav ul li.visually-inactive:hover {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+/* Inactive state */
+nav ul li.inactive {
+    color: #888;
+    cursor: not-allowed;
+}
+
+nav ul li.inactive:hover {
+    text-decoration: none;
 }

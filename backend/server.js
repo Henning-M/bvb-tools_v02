@@ -198,6 +198,9 @@ app.delete('/teams/:id', async (req, res) => {
 
         const { player1, player2 } = playerResult.rows[0];
 
+        // Delete all fixtures (fixtures need team-id as foreign key)
+        await pool.query('DELETE FROM fixtures');
+
         // Delete the team
         const teamDeleteResult = await pool.query(
             'DELETE FROM teams WHERE id = $1 RETURNING id',
@@ -218,6 +221,116 @@ app.delete('/teams/:id', async (req, res) => {
         // If there's an error, roll back the transaction
         await pool.query('ROLLBACK');
         console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// FIXTURES TABLE OPERATIONS ///////////////////////////////////////////////////////////////
+
+//PUT - initialize tournament schedule
+app.put('/fixtures', async (req, res) => {
+    const { schedule } = req.body;
+    
+    try {
+      await pool.query('BEGIN');
+  
+      // Clear existing fixtures
+      await pool.query('DELETE FROM fixtures');
+  
+      // Insert new fixtures
+      for (let roundIndex = 0; roundIndex < schedule.length; roundIndex++) {
+        const round = schedule[roundIndex];
+        const roundNumber = roundIndex + 1;
+  
+        for (let groupIndex = 0; groupIndex < round.groups.length; groupIndex++) {
+          const group = round.groups[groupIndex];
+          const groupNumber = groupIndex + 1;
+  
+          for (const team of group) {
+            await pool.query(
+              'INSERT INTO fixtures (round, "group", team, points) VALUES ($1, $2, $3, $4)',
+              [roundNumber, groupNumber, team.id, 0]
+            );
+          }
+        }
+      }
+  
+      await pool.query('COMMIT');
+      res.status(200).json({ message: 'Schedule successfully saved to fixtures' });
+    } catch (error) {
+      await pool.query('ROLLBACK');
+      console.error('Error saving fixtures:', error);
+      res.status(500).json({ error: 'An error occurred while saving the fixtures' });
+    }
+  });
+
+//GET - fetch fixtures and scores IS THIS IN USE?!
+app.get('/fixtures', async (req, res) => {
+});
+
+// GET - fetch distinct rounds from fixtures
+app.get('/fixtures/rounds', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT DISTINCT round FROM fixtures ORDER BY round');
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching rounds from fixtures:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+//DELETE - remove all fixtures / clear the table
+app.delete('/fixtures', async (req, res) => {
+    try {
+        await pool.query('DELETE FROM fixtures');
+        res.json({ message: 'Schedule cleared'});
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+
+// FEATURE_STATE TABLE OPERATIONS ///////////////////////////////////////////////////////////////
+
+// Get the current state of the registration-open feature
+app.get('/feature_states/registration-open', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT is_enabled FROM feature_states WHERE feature_name = $1', ['registration-open']);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Feature not found' });
+        }
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error fetching feature state:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Toggle the state of the registration-open feature
+app.post('/feature_states/registration-open/toggle', async (req, res) => {
+    try {
+        const result = await pool.query('UPDATE feature_states SET is_enabled = NOT is_enabled WHERE feature_name = $1 RETURNING is_enabled', ['registration-open']);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Feature not found' });
+        }
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error toggling feature state:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Get the current state of the isFixturesInDb feature
+app.get('/feature_states/fixturesindb', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT is_enabled FROM feature_states WHERE feature_name = $1', ['fixturesInDb']);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Feature not found' });
+        }
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error fetching feature state:', error);
         res.status(500).json({ error: 'Server error' });
     }
 });

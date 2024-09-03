@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setGroups, setRounds, setTeams, setSchedule } from "../redux/slices/kotcScConfigSlice";
+import { useFeatureToggle } from "../contexts/FeatureToggleContext";
 import '../styles/KotcScConfiguration.css'
 
 function KotcScConfiguration () {
@@ -10,6 +11,7 @@ function KotcScConfiguration () {
     const rounds = useSelector(state => state.kotcScConfig.rounds);
     const teams = useSelector(state => state.kotcScConfig.teams);
     const schedule = useSelector(state => state.kotcScConfig.schedule);
+    const { isFixturesInDb, setIsFixturesInDb } = useFeatureToggle(); // Use the context
 
     // Initialize dispatch
     const dispatch = useDispatch();
@@ -39,7 +41,7 @@ function KotcScConfiguration () {
         fetchTeams();
     }, [dispatch]);
 
-    // NEW LOGIC - START ///////////////////////////////////////////////////////////////
+    // LOGIC TO CREATE SCHEDULE - START ///////////////////////////////////////////////////////////////
 
     // Function to initialize pairings and group sizes map
     const initializeMaps = (teams, pairings, groupSizes) => {
@@ -152,7 +154,7 @@ function KotcScConfiguration () {
     };
 
     // Function to handle schedule creation when button is clicked
-    const handleCreateSchedule = () => {
+    const handleCreateSchedule = async () => {
         if (teams.length < 1 || groups < 1 || rounds < 1) {
             alert('Please ensure there are enough teams, groups, and rounds.');
             return;
@@ -160,9 +162,87 @@ function KotcScConfiguration () {
 
         const generatedSchedule = generateRounds(teams, groups, rounds);
         dispatch(setSchedule(generatedSchedule)); // Dispatch action to update schedule
+        
+        try {
+            const response = await fetch('http://localhost:5000/fixtures', {
+                method: 'DELETE',
+            });
+            if(!response.ok) {
+                throw new Error('Failed to clear schedule');
+            } else {
+                setIsFixturesInDb(false); // Since db was just cleared, set this to false
+            }
+        } catch (error) {
+            console.error('Error removing existing fixtures from the database', error);
+            alert('An error occurred while clearing old fixtures from the database. Please try again.');
+          };        
     };
 
-    // NEW LOGIC END ////////////////////////////////////////////////////////////////////
+    // LOGIC END ////////////////////////////////////////////////////////////////////
+
+    // Pass schedule to database (to be used for tournament)
+    const handleSubmitSchedule = async () => {
+        if (schedule.length === 0) {
+          alert('Please create a schedule first.');
+          return;
+        }
+      
+        try {
+          const response = await fetch('http://localhost:5000/fixtures', {
+            method: 'PUT',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ schedule }),
+          });
+      
+          if (response.ok) {
+            alert('Schedule submitted successfully. Navigate to KOTC Tournament to manage fixtures and scores now.');
+            setIsFixturesInDb(true); // Set to true after successful submission
+            // Optionally, you can redirect the user or update the UI here
+          } else {
+            throw new Error('Server responded with an error');
+          }
+        } catch (error) {
+          console.error('Error submitting schedule:', error);
+          alert('An error occurred while submitting the schedule. Please try again.');
+        }
+      };
+
+      const handleClearSchedule = async() => {
+        try {
+            const response = await fetch('http://localhost:5000/fixtures', {
+                method: 'DELETE',
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to clear schedule');
+            } else {
+                alert('Schedule cleared')
+                setIsFixturesInDb(false); // Reset this when the schedule is cleared
+            };
+        } catch (error) {
+            console.error('Error clearing schedule:', error);
+            alert('There was an error clearing the schedule. Please try again.');
+        }
+      };
+
+    // Function to determine button states
+    const getButtonState = (buttonType) => {
+        const isScheduleInState = schedule.length > 0;
+        switch (buttonType) {
+            case 'create':
+                return isScheduleInState ? 'visually-inactive' : 'active';
+            case 'submit':
+                if (!isScheduleInState) return 'inactive';
+                return isFixturesInDb ? 'visually-inactive' : 'active';
+            case 'clear':
+                if (!isScheduleInState && !isFixturesInDb) return 'visually-inactive';
+                return isFixturesInDb ? 'active' : 'inactive';
+            default:
+                return 'active';
+        }
+    };
 
     return (
         <div className="kotcscconfiguration-container">
@@ -191,22 +271,31 @@ function KotcScConfiguration () {
             </div>
             <div className="kotcscconfiguration-buttons">
             <button 
-                className={`kotcscconfiguration-createschedule-button ${schedule.length > 0 ? 'inactive' : ''}`}
+                className={`kotcscconfiguration-createschedule-button ${getButtonState('create') === 'visually-inactive' ? 'visually-inactive' : ''}`}
                 onClick={handleCreateSchedule}>
-                Create schedule
+                Create a schedule
             </button>
             <button 
-                className={`kotcscconfiguration-submitschedule-button ${schedule.length === 0 ? 'inactive' : ''}`}
-                // onClick={handleSubmitSchedule} // Assuming you have a function to handle submit
-            >
-                Submit schedule
+                className={`kotcscconfiguration-submitschedule-button ${getButtonState('submit') === 'inactive' ? 'inactive' : ''}`}
+                onClick={handleSubmitSchedule}>
+                Submit this schedule
+            </button>
+            <button 
+                className={`kotcscconfiguration-clearschedule-button ${getButtonState('clear') === 'visually-inactive' ? 'visually-inactive' : ''}`}
+                onClick={handleClearSchedule}>
+                Clear schedule
             </button>
             </div>
             <div className="kotcscconfiguration-schedulepreview">
                 {schedule.length > 0 && (
-                    <p>
-                        This is a schedule PREVIEW. Click "Submit schedule" to save.
-                    </p> // The schedule can be re-shuffled at will by clicking the "Create schedule" button again. To start playing with this schedule, use the "Submit schedule" button. That will load the schedule into the database and prepare if for entering results etc..
+                    <ul>
+                        <li>This is a schedule PREVIEW</li>
+                        <li>Click "Create a schedule" again to re-shuffle</li>
+                        <li>"Submit this schedule" to saves the schedule to the database</li>
+                        <li>"Clear schedule" deletes a saved schedule from the database</li>
+                        <li>Once a schedule was submitted, it is saved in the database and <br/>
+                        you can start your tournament from the 'Tournament Home' (see Navigation)</li>
+                    </ul>
                 )}
                 {schedule.length > 0 ? (
                     schedule.map((roundObj, roundIndex) => (

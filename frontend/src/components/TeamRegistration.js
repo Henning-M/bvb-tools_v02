@@ -1,21 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { useFeatureToggle } from '../contexts/FeatureToggleContext';
+import { useNavigate } from 'react-router-dom';
 import Navigation from './Navigation';
 import '../styles/TeamRegistration.css';
 
 function TeamRegistration() {
+    const navigate = useNavigate();
     const [player1Name, setPlayer1Name] = useState('');
     const [player2Name, setPlayer2Name] = useState('');
     const [teams, setTeams] = useState([]);
+    const { isRegistrationOpen, setIsRegistrationOpen } = useFeatureToggle();
 
-    // Handle changes to player 1 input
-    const handlePlayer1Change = (e) => {
-        setPlayer1Name(e.target.value);
-    };
+    // Handle changes to player 1/2 input
+    const handlePlayer1Change = (e) => {setPlayer1Name(e.target.value);};
+    const handlePlayer2Change = (e) => {setPlayer2Name(e.target.value);};
 
-    // Handle changes to player 2 input
-    const handlePlayer2Change = (e) => {
-        setPlayer2Name(e.target.value);
-    };
+    // Compute the team name based on player inputs
+    const teamName = `${player1Name} / ${player2Name}`;
+
+    // FETCH TEAMS & PLAYERS FROM DB ///////////////////////////////////////////////////////////////
 
     // Function to fetch all registered teams
     const fetchTeams = async () => {
@@ -28,10 +31,13 @@ function TeamRegistration() {
         }
     };
 
-    // Fetch teams when component mounts
+    // Fetch teams and initial registration status when component mounts
     useEffect(() => {
         fetchTeams();
-    }, []);
+        // Assuming fetchRegistrationStatus is available from the context
+        // If not, you might need to implement it in the RegistrationContext
+        setIsRegistrationOpen(prevState => prevState); // This will trigger a re-fetch in the context
+    }, [setIsRegistrationOpen]);
 
     // New function to fetch all players
     const fetchAllPlayers = async () => {
@@ -47,8 +53,24 @@ function TeamRegistration() {
         }
     };
 
-    // Compute the team name based on player inputs
-    const teamName = `${player1Name} / ${player2Name}`;
+
+    // MANAGE STATE OF REGISTRATION-OPEN IN DB ///////////////////////////////////////////////////////////////
+
+    // Function to toggle registration status
+    const toggleRegistrationStatus = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/feature_states/registration-open/toggle', {
+                method: 'POST',
+            });
+            const data = await response.json();
+            setIsRegistrationOpen(data.is_enabled);
+        } catch (error) {
+            console.error('Error toggling registration status:', error);
+        }
+    };
+
+
+    // REGISTER OR REMOVE A TEAM ///////////////////////////////////////////////////////////////
 
     // Handle the register button click
     const handleRegister = async () => {
@@ -123,6 +145,28 @@ function TeamRegistration() {
         await fetchTeams();
     };
 
+
+    const handleRemoveTeam = async (teamId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/teams/${teamId}`, {
+                method: 'DELETE',
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to delete the team');
+            }
+    
+            const data = await response.json();
+            alert(data.message);
+    
+            // Update the teams state to remove the deleted team
+            setTeams((prevTeams) => prevTeams.filter((team) => team.id !== teamId));
+        } catch (error) {
+            console.error('Error deleting team:', error);
+            alert('There was an error deleting the team. Please try again.');
+        }
+    };
+
     return (
         <div>
         <Navigation />
@@ -138,37 +182,65 @@ function TeamRegistration() {
                     <h2>Registered teams</h2>
                 </div>
                 <div className="teamregistration-cLeft-body">
-                    <label>
-                        Player 1:
-                        <input
-                            type="text"
-                            value={player1Name}
-                            maxLength={100}
-                            onChange={handlePlayer1Change}
-                        />
-                    </label>
-                    <label>
-                        Player 2:
-                        <input
-                            type="text"
-                            value={player2Name}
-                            maxLength={100}
-                            onChange={handlePlayer2Change}
-                        />
-                    </label>
-                    <div>
-                        <p>{teamName}</p>
-                    </div>
-                    <button onClick={handleRegister}>Register</button>
+                    {isRegistrationOpen ? (
+                        <>
+                            <label>
+                                Player 1:
+                                <input
+                                    type="text"
+                                    value={player1Name}
+                                    maxLength={100}
+                                    onChange={handlePlayer1Change}
+                                />
+                            </label>
+                            <label>
+                                Player 2:
+                                <input
+                                    type="text"
+                                    value={player2Name}
+                                    maxLength={100}
+                                    onChange={handlePlayer2Change}
+                                />
+                            </label>
+                            <div>
+                                <p>{teamName}</p>
+                            </div>
+                            <button onClick={handleRegister}>Register</button>
+                        </>
+                    ) : (
+                        <div>
+                            <p>Registration is closed.</p>
+                            <a 
+                                href="/kotc-schedule-creator" 
+                                onClick={(e) => {
+                                    e.preventDefault(); // Prevent default anchor behavior
+                                    navigate('/kotc-schedule-creator'); // Use navigate for SPA routing
+                                }}
+                            >
+                                Go to KOTC Schedule Creator
+                            </a>
+                        </div>
+                    )}
                 </div>
                 <div className="teamregistration-cRight-body">
-                    <ol>
-                        {teams.map((team, index) => (
-                            <li key={team.id}>
-                                {team.name}
-                            </li>
-                        ))}
-                    </ol>
+                    <table className="teamregistration-team-table">
+                        <tbody>
+                            {teams.map((team, index) => (
+                                <tr key={team.id}>
+                                    <td>{index + 1}.</td>
+                                    <td>{team.name}</td>
+                                    {isRegistrationOpen && (
+                                        <td onClick={() => handleRemoveTeam(team.id)}>[ X ]</td>
+                                    )}
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+                <div className="teamregistration-toggleRegistration">
+                    <button onClick={toggleRegistrationStatus}>
+                        {isRegistrationOpen ? 'Close registration' : 'Re-open registration'}
+                    </button>
                 </div>
             </div>
         </div>

@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { FeatureToggleProvider } from './contexts/FeatureToggleContext';
 import Home from './components/Home';
 import About from './components/About';
 import TeamRegistration from './components/TeamRegistration';
@@ -8,6 +9,7 @@ import KotcTournamentHome from './components/KotcTournamentHome';
 
 function App() {
   return (
+    <FeatureToggleProvider>
       <Router>
           <Routes>
               <Route path="/" element={<Home />} />
@@ -17,6 +19,7 @@ function App() {
               <Route path="/kotc-tournament-home" element={<KotcTournamentHome />} />
           </Routes>
       </Router>
+    </FeatureToggleProvider>
   );
 }
 

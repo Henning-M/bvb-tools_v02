@@ -1,5 +1,53 @@
 .kotctournamenthome-container {
-    text-align: center;
-    padding: 20px;
     margin-top: 10vh; /* Making space for Nav */
+    height: 90vh; /* Adjust height to fit the viewport minus the nav space */
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: auto auto 80vh;
+    gap: 15px;
+    grid-template-areas:
+      "page-header"
+      "page-body-nav"
+      "page-body";
 }
+
+.kotctournamenthome-page-header {
+    grid-area: page-header;
+    text-align: center;
+}
+
+.kotctournamenthome-page-body-nav {
+    grid-area: page-body-nav;
+    display: flex;
+    justify-content: center; /* Center items horizontally */
+    margin: 0;
+    padding: 0;
+}
+
+.kotctournamenthome-page-body-nav ul {
+    list-style-type: none; /* Remove bullet points */
+    margin: 0;
+    padding: 0;
+    display: flex;
+}
+
+.kotctournamenthome-page-body-nav li {
+    padding: 10px 20px;
+    cursor: pointer;
+    background-color: white;
+    color: black;
+    border: 1px solid black; /* Optional: adds border to buttons */
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.kotctournamenthome-page-body-nav li.selected {
+    background-color: darkgray; /* Dark background for selected item */
+    color: white; /* White text for selected item */
+}
+
+/* Optional: hover effect */
+.kotctournamenthome-page-body-nav li:hover {
+    background-color: lightgray;
+}
+
+.kotctournamenthome-page-body { grid-area: page-body; }
