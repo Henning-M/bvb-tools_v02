@@ -1,0 +1,78 @@
+.kotchfscoreentry-container {  
+    display: grid;
+    grid-template-columns: 80%;
+    justify-content: center;
+    grid-template-rows: auto;
+    gap: 5px 0px;
+    grid-auto-flow: row;
+    grid-template-areas:
+      "kotchfscoreentry-roundbody"
+      "kotchfhscoreentry-roundfooter";
+  }
+  
+  .kotchfscoreentry-roundbody {
+    overflow-x: auto; /* Allows horizontal scrolling if needed */
+    justify-content: center;
+}
+
+table.kotchfscoreentry-roundbody-table {
+    border: 0px solid #dededf;
+    height: 100%;
+    width: 80%;
+    table-layout: fixed;
+    border-collapse: collapse;
+    border-spacing: 1px;
+    text-align: center;
+  }
+
+  table.kotchfscoreentry-roundbody-table td {
+    padding: 3px 2px;
+    border-collapse: collapse; /* Ensure borders do not double up */
+  }
+
+  table.kotchfscoreentry-roundbody-table th {
+    padding: 3px 2px;
+    border: 0px solid #dededf;
+    background-color: #eceff1;
+    color: #000000;
+  }
+
+  table.kotchfscoreentry-roundbody-table thead {
+    border-bottom: 2px solid #444444;
+  }
+
+  table.kotchfscoreentry-roundbody-table thead th {
+    font-weight: bold;
+  }
+
+  .kotchfscoreentry-roundbody-table tr.last-row {
+    border-bottom: 1px solid black; /* Adjust the border style as needed */
+}
+
+.kotchfscoreentry-roundbody-table input[type="number"] {
+  width: auto; /* Set width to auto */
+  max-width: 60px; /* Optional: Set a maximum width if needed */
+  padding: 5px; /* Add some padding for better appearance */
+  box-sizing: border-box; /* Ensure padding is included in the width */
+}
+
+.kotchfscoreentry-roundbody-table-button {
+    padding: 3px;
+    margin: 5px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: all 0.3s ease;
+}
+
+.kotchfscoreentry-roundbody-table-button:hover {
+    background-color: #0056b3; /* Darker shade for hover effect */
+}
+  
+  .kotchfhscoreentry-roundfooter { grid-area: kotchfhscoreentry-roundfooter; }
+  

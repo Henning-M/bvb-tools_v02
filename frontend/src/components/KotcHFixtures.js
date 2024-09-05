@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import KotcHFScoreEntry from './KotcHFScoreEntry';
 import '../styles/KotcHFixtures.css';
 
 function KotcHFixtures() {
@@ -26,7 +27,7 @@ function KotcHFixtures() {
 
   return (
     <div className="kotchfixtures-container">
-    <div className="kotchfixtures-container">
+    {/* <div className="kotchfixtures-container"> */}
     <div className="kotchfixtures-roundnav">
                 <ul>
                     {rounds.map((round, index) => (
@@ -40,24 +41,14 @@ function KotcHFixtures() {
                     ))}
                 </ul>
             </div>
-        <div className="kotchfixtures-roundbody"></div>
+        <div className="kotchfixtures-roundbody">
+            <KotcHFScoreEntry selectedIndex={selectedIndex}/>
+        </div>
         <div className="kotchfixtures-roundfooter"></div>
-    </div>
+    {/* </div> */}
     </div>
 );
 }
   
 
 export default KotcHFixtures;
-
-
-  // const renderContent = () => {
-    //     switch (selectedIndex) {
-    //         case 0:
-    //             return <KotcHFixtures />;
-    //         case 1:
-    //             return <KotcHRanking />;
-    //         default:
-    //             return null;
-    //     }
-    // };

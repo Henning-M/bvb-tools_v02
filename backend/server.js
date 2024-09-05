@@ -268,7 +268,7 @@ app.put('/fixtures', async (req, res) => {
 app.get('/fixtures', async (req, res) => {
 });
 
-// GET - fetch distinct rounds from fixtures
+// GET - fetch distinct rounds from fixtures - used for the Nav on KotcHFixtures
 app.get('/fixtures/rounds', async (req, res) => {
     try {
         const result = await pool.query('SELECT DISTINCT round FROM fixtures ORDER BY round');
@@ -278,6 +278,108 @@ app.get('/fixtures/rounds', async (req, res) => {
         res.status(500).json({ error: 'Server error' });
     }
 });
+
+// GET - fetch fixtures for a specific round
+app.get('/fixtures/round/:roundNumber', async (req, res) => {
+    const { roundNumber } = req.params;
+    try {
+        const result = await pool.query(`
+            SELECT f."group", f.team AS team_id, t.name AS team, f.points
+            FROM fixtures f
+            JOIN teams t ON f.team = t.id
+            WHERE f.round = $1
+            ORDER BY f."group", t.name
+        `, [roundNumber]);
+
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching fixtures for round:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// PUT - update points for a specific team in a specific round
+app.put('/fixtures/round/:roundNumber/team/:teamId', async (req, res) => {
+    const { roundNumber, teamId } = req.params;
+    const { points } = req.body; // Expect points to be sent in the request body
+
+    try {
+        const result = await pool.query(`
+            UPDATE fixtures
+            SET points = $1
+            WHERE round = $2 AND team = $3
+        `, [points, roundNumber, teamId]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Fixture not found for the specified round and team' });
+        }
+
+        res.status(200).json({ message: 'Points updated successfully' });
+    } catch (error) {
+        console.error('Error updating points:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// GET - fetch submitted points for a specific round
+app.get('/fixtures/round/:roundNumber/points', async (req, res) => {
+    const { roundNumber } = req.params;
+    try {
+        const result = await pool.query(`
+            SELECT team, points 
+            FROM fixtures
+            WHERE round = $1
+        `, [roundNumber]);
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching submitted points:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// GET - fetch the current state of acceptingInput for a specific round
+app.get('/fixtures/round/:roundNumber/acceptingInput', async (req, res) => {
+    const { roundNumber } = req.params;
+    try {
+        const result = await pool.query(`
+            SELECT acceptinginput
+            FROM fixtures 
+            WHERE round = $1 
+            LIMIT 1
+        `, [roundNumber]);
+
+        if (result.rows.length > 0) {
+            res.json({ acceptingInput: result.rows[0].acceptinginput });
+        } else {
+            res.status(404).json({ error: 'Round not found' });
+        }
+    } catch (error) {
+        console.error('Error fetching acceptingInput state:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// PUT - toggle the acceptingInput state for a specific round
+app.put('/fixtures/round/:roundNumber/acceptingInput', async (req, res) => {
+    const { roundNumber } = req.params;
+    try {
+        const result = await pool.query(`
+            UPDATE fixtures 
+            SET acceptingInput = NOT acceptingInput 
+            WHERE round = $1
+        `, [roundNumber]);
+
+        if (result.rowCount === 0) {
+            return res.status(404).json({ error: 'Round not found' });
+        }
+
+        res.status(200).json({ message: 'acceptingInput state toggled successfully' });
+    } catch (error) {
+        console.error('Error toggling acceptingInput state:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
 
 //DELETE - remove all fixtures / clear the table
 app.delete('/fixtures', async (req, res) => {

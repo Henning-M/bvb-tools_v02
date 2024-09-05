@@ -18,7 +18,7 @@
     display: flex;
     justify-content: center; /* Center items horizontally */
     margin: 0;
-    padding: 0;
+    padding: 20px;
 }
 
 .kotchfixtures-roundnav ul {
@@ -49,7 +49,10 @@
 
 /* ############ ROUNDBODY STYLES - not relevant, will be separate component ############ */
   
-.kotchfixtures-roundbody { grid-area: kotchfixtures-roundbody; }
+.kotchfixtures-roundbody {
+    grid-area: kotchfixtures-roundbody;
+    
+}
 
 
 /* ############ ROUNDFOOTER STYLES - might be removed after all - close round button to be in round component ############ */
