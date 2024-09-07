@@ -5,6 +5,7 @@ import '../styles/KotcHFScoreEntry.css';
 
 function KotcHFScoreEntry({ selectedIndex }) {
     const [fixtures, setFixtures] = useState([]);
+    const [acceptingInput, setAcceptingInput] = useState(true);
     const pointsFromRedux = useSelector(state => state.kotcHFScoreEntry.points) || {}; // Get points from Redux with default value
     const [submittedPoints, setSubmittedPoints] = useState({}); // State to hold submitted points from the database
     const dispatch = useDispatch();
@@ -16,6 +17,7 @@ function KotcHFScoreEntry({ selectedIndex }) {
                 const data = await response.json();
                 setFixtures(data);
                 fetchSubmittedPoints(data); // Fetch submitted points after fetching fixtures
+                fetchAcceptingInput(); // Fetch acceptingInput state
             } catch (error) {
                 console.error('Error fetching fixtures:', error);
             }
@@ -32,6 +34,16 @@ function KotcHFScoreEntry({ selectedIndex }) {
                 setSubmittedPoints(pointsMap);
             } catch (error) {
                 console.error('Error fetching submitted points:', error);
+            }
+        };
+
+        const fetchAcceptingInput = async () => {
+            try {
+                const response = await fetch(`http://localhost:5000/fixtures/round/${selectedIndex + 1}/acceptingInput`);
+                const data = await response.json();
+                setAcceptingInput(data.acceptingInput); // Update the acceptingInput state
+            } catch (error) {
+                console.error('Error fetching acceptingInput state:', error);
             }
         };
 
@@ -55,6 +67,8 @@ function KotcHFScoreEntry({ selectedIndex }) {
                     ...prevSubmittedPoints,
                     [teamId]: pointsValue, // Update submitted points in the state
                 }));
+                // Clear the input field for this team in Redux
+                dispatch(setPoints({ teamId, round: selectedIndex + 1, value: '' })); // Reset the input value in Redux
             } else {
                 throw new Error('Server responded with an error');
             }
@@ -66,6 +80,23 @@ function KotcHFScoreEntry({ selectedIndex }) {
 
     const handlePointsChange = (teamId, value) => {
         dispatch(setPoints({ teamId, round: selectedIndex + 1, value })); // Dispatch the action to update points in Redux
+    };
+
+    const handleCloseRound = async () => {
+        try {
+            const response = await fetch(`http://localhost:5000/fixtures/round/${selectedIndex + 1}/acceptingInput`, {
+                method: 'PUT',
+            });
+
+            if (response.ok) {
+                setAcceptingInput(prevState => !prevState); // Toggle the acceptingInput state
+            } else {
+                throw new Error('Server responded with an error');
+            }
+        } catch (error) {
+            console.error('Error toggling acceptingInput state:', error);
+            alert('An error occurred while toggling the round state. Please try again.');
+        }
     };
 
     return (
@@ -97,12 +128,13 @@ function KotcHFScoreEntry({ selectedIndex }) {
                                     type="number"
                                     min="0"
                                     placeholder=""
-                                    value={pointsFromRedux[selectedIndex + 1]?.[fixture.team_id] || ''} // Corrected access to pointsFromRedux
+                                    value={pointsFromRedux[selectedIndex + 1]?.[fixture.team_id] || ''} // Controlled input from Redux state
                                     onChange={(e) => handlePointsChange(fixture.team_id, e.target.value)} // Update points in Redux
                                 />
                                 <button
-                                    className="kotchfscoreentry-roundbody-table-button"
+                                    className={`kotchfscoreentry-roundbody-table-button ${!acceptingInput ? 'disabled' : ''}`}
                                     onClick={() => submitPointsForTeamInRound(fixture.team_id)} // Pass teamId to the submit function
+                                    disabled={!acceptingInput} // Disable button based on acceptingInput state
                                 >
                                     Submit
                                 </button>
@@ -113,6 +145,16 @@ function KotcHFScoreEntry({ selectedIndex }) {
                         </tr>
                     );
                 })}
+                <tr>
+                        <td colSpan={4}>
+                            <button
+                                className="kotchfscoreentry-roundbody-table-button"
+                                onClick={handleCloseRound}
+                            >
+                                {acceptingInput ? 'Close round' : 'Re-open round'}
+                            </button>
+                        </td>
+                    </tr>
             </tbody>
             </table>
         </div>

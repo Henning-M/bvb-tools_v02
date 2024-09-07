@@ -36,7 +36,7 @@ function KotcHFixtures() {
                             className={selectedIndex === index ? 'selected' : ''}
                             onClick={() => handleClick(index)}
                         >
-                            {round.round} {/* Display the round number */}
+                            Round {round.round} {/* Display the round number */}
                         </li>
                     ))}
                 </ul>

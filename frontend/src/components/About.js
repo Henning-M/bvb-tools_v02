@@ -7,7 +7,7 @@ const About = () => {
         <div>
             <Navigation />
             <div className="about-container">
-                <h1>What the hell is this?</h1>
+                <h1>What is this thing?</h1>
                 <div className="about-faq">
                     <div className="about-faq-item">
                         <h2 className="about-faq-question">How does the KOTC Schedule Creator work?</h2>

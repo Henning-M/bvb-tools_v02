@@ -73,6 +73,11 @@ table.kotchfscoreentry-roundbody-table {
 .kotchfscoreentry-roundbody-table-button:hover {
     background-color: #0056b3; /* Darker shade for hover effect */
 }
+
+.kotchfscoreentry-roundbody-table-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
   
   .kotchfhscoreentry-roundfooter { grid-area: kotchfhscoreentry-roundfooter; }
   

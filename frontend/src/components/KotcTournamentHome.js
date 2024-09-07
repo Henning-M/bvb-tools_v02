@@ -42,11 +42,11 @@ function KotcTournamentHome () {
                     onClick={() => handleClick(1)}>
                     Ranking
                 </li>
-                <li
+                {/* <li
                     className={selectedIndex === 1 ? 'selected' : ''}
                     onClick={() => handleClick(1)}>
                     Full Schedule
-                </li>
+                </li> */}
             </ul>
         </div>
         <div className="kotctournamenthome-page-body">
