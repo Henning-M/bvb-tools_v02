@@ -10,7 +10,36 @@ const About = () => {
                 <h1>What is this thing?</h1>
                 <div className="about-faq">
                     <div className="about-faq-item">
-                        <h2 className="about-faq-question">How does the KOTC Schedule Creator work?</h2>
+                        <h2 className="about-faq-question">What is 'King-of-the-Court'?</h2>
+                        <p className="about-faq-answer">
+                            <ul>
+                                <li>The court sides are named: one side is the 'Challenger' side, the other one the 'King' side</li>
+                                <li>There is one team on the king side (do a draw before playing). All other teams 
+                                    queue up behind the baseline of the challenger side
+                                </li>
+                                <li>The team on the challenger side always serves, but only the team on the king side can make points</li>
+                                <li>If the challenger team makes the point ('break'), they move to the king side for the next rally. 
+                                    The team that lost the point (on the king side) moves over to the challenger side queue
+                                </li>
+                                <li>If the king side makes the point ('sideout'), this team gets +1 point. To keep scores 
+                                    transparent for all teams, the king side team have to shout out their current score after every 
+                                    point they make
+                                </li>
+                                <li>On the challenger side, teams take turns serving</li>
+                                <li>The game is time-boxed (e.g. 10 minutes). When the time is up, the team with the most points won</li>
+                                <li>Important: Service errors do NOT count as a point for the king side team. The game just continues
+                                     with the next challenger side team serving.
+                                </li>
+                                <li>Eitquette: since time is critical (especially for teams with few points), players should never 
+                                    deliberately delay the game, e.g. by taking a long time to serve. The team losing the rally should 
+                                    further always recover the ball immediately after the rally, so no time is lost fetching it
+                                </li>
+                                {/* <li>Create English version of this: https://www.volleyball-verband.de/de/redaktion/2021/august/beach--regeln-king-of-the-court/</li> */}
+                            </ul>
+                        </p>
+                    </div>
+                    <div className="about-faq-item">
+                        <h2 className="about-faq-question">How does the KOTC Schedule Creator create a schedule?</h2>
                         <p className="about-faq-answer">
                             <ul>
                                 <li>Takes three parameters to create a schedule
@@ -32,15 +61,30 @@ const About = () => {
                             </ul>
                         </p>
                     </div>
-                    {/* <div className="about-faq-item">
-                        <h2 className="about-faq-question">How can I use this application?</h2>
-                        <p className="about-faq-answer">You can use this application by following the instructions provided in the user guide.</p>
-                    </div>
                     <div className="about-faq-item">
+                        <h2 className="about-faq-question">What are 'calibrated points'?</h2>
+                        <p className="about-faq-answer">
+                            <ul>
+                                <li>Depending on the amount of teams, it can not be guaranteed that all groups (courts) have 
+                                the same size (amount of teams)</li>
+                                <li>Since rounds are time-boxed and all groups play for the same amount of time, 
+                                teams in the smaller groups have an unfair advantage because they have more opportunities to make points</li>
+                                <li>Example: 7 teams, so groupA has 4, groupB 3 teams; since there are always two teams on the 
+                                    court (one challenger, one king), in groupB, only one team is waiting and will play at least every other 
+                                    rally. In groupA, there are always two teams waiting and as a challenger, each waiting team has to wait 
+                                    two rallys until it's their turn again.</li>
+                                <li>This inbalance can be corrected by calibrating points for group size (for every team and round)</li>
+                                <li>The calibrated points for each team in a round are calculated as follows: RegularPoints * (n / nMax)</li>
+                                <li>nMax is the number of teams in the biggest group and n is the number of teams in the 
+                                    group that this team played in
+                                </li>
+                            </ul>
+                        </p>
+                    </div>
+                    {/* <div className="about-faq-item">
                         <h2 className="about-faq-question">Where can I find more information?</h2>
                         <p className="about-faq-answer">Additional information can be found in the documentation section of our website.</p>
-                    </div> */}
-                    {/* Add more FAQ items as needed */}
+                    </div> */}                    
                 </div>
             </div>
         </div>

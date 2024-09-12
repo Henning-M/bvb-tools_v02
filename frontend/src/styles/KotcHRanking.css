@@ -1,3 +1,20 @@
+.kotchranking-points-type-container {
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: center;
+}
+
+.kotchranking-points-type-container label {
+    margin: 0 1rem;
+    display: flex;
+    align-items: center;
+}
+
+.kotchranking-points-type-container input[type="radio"] {
+    margin-right: 0.5rem;
+}
+
+
 .ranking-table {
     width: 100%;
     border-collapse: collapse;

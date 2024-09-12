@@ -10,6 +10,10 @@ function KotcHFScoreEntry({ selectedIndex }) {
     const [submittedPoints, setSubmittedPoints] = useState({}); // State to hold submitted points from the database
     const dispatch = useDispatch();
 
+    const handlePointsChange = (teamId, value) => {
+        dispatch(setPoints({ teamId, round: selectedIndex + 1, value })); // Dispatch the action to update points in Redux
+    };
+
     useEffect(() => {
         const fetchFixtures = async () => {
             try {
@@ -52,13 +56,24 @@ function KotcHFScoreEntry({ selectedIndex }) {
 
     const submitPointsForTeamInRound = async (teamId) => {
         const pointsValue = pointsFromRedux[selectedIndex + 1]?.[teamId] || 0; // Get the points value from the Redux state
+        const fixtureData = fixtures.find(fixture => fixture.team_id === teamId); // Find the fixture for the team in the current round
+
+        if (!fixtureData) {
+            alert('Fixture not found for the selected team.');
+            return;
+        };
+
+        const calibrationFactor = parseFloat(fixtureData.calibrationfactor); // Get the calibration factor as a float
+        const calibratedPointsValue = (pointsValue * calibrationFactor).toFixed(4); // Calculate calibrated points value
+
+
         try {
             const response = await fetch(`http://localhost:5000/fixtures/round/${selectedIndex + 1}/team/${teamId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ points: pointsValue }),
+                body: JSON.stringify({ points: pointsValue, pointsCalibrated: calibratedPointsValue }), // Send both points and calibrated points
             });
 
             if (response.ok) {
@@ -76,10 +91,6 @@ function KotcHFScoreEntry({ selectedIndex }) {
             console.error('Error updating points:', error);
             alert('An error occurred while updating points. Please try again.');
         }
-    };
-
-    const handlePointsChange = (teamId, value) => {
-        dispatch(setPoints({ teamId, round: selectedIndex + 1, value })); // Dispatch the action to update points in Redux
     };
 
     const handleCloseRound = async () => {

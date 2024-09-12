@@ -146,16 +146,31 @@ function KotcScConfiguration () {
                 if (repeats === 0) break;
             }
 
+            // Determine the size of the largest group after creating groups
+            const maxGroupSize = Math.max(...bestGroups.map(group => group.length));
+
+            // Calculate calibration factors for each team in the round
+            const roundWithCalibrationFactors = {
+                round: `R${round}`,
+                groups: bestGroups.map(group => {
+                    return group.map(team => {
+                        const groupSize = group.length; // Size of the current group
+                        const calibrationFactor = parseFloat((groupSize / maxGroupSize).toFixed(4)); // Calculate calibration factor
+                        return { ...team, calibrationfactor: calibrationFactor }; // Add calibration factor
+                    });
+                }),
+            };
+
+            rounds.push(roundWithCalibrationFactors);
             updatePairings(bestGroups, pairings);
-            rounds.push({ round: `R${round}`, groups: bestGroups });
         }
 
-        return rounds;
-    };
+    return rounds;
+};
 
     // Function to handle schedule creation when button is clicked
     const handleCreateSchedule = async () => {
-        if (teams.length < 1 || groups < 1 || rounds < 1) {
+        if (teams.length < 3 || groups < 2 || rounds < 1) {
             alert('Please ensure there are enough teams, groups, and rounds.');
             return;
         }
@@ -163,6 +178,7 @@ function KotcScConfiguration () {
         const generatedSchedule = generateRounds(teams, groups, rounds);
         dispatch(setSchedule(generatedSchedule)); // Dispatch action to update schedule
         
+        // Clear existing fixtures in the database
         try {
             const response = await fetch('http://localhost:5000/fixtures', {
                 method: 'DELETE',

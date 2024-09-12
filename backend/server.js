@@ -10,7 +10,7 @@ app.use(cors());
 app.use(express.json());
 
 
-// PLAYERS TABLE OPERATIONS ///////////////////////////////////////////////////////////////
+// #PLAYERS TABLE OPERATIONS ///////////////////////////////////////////////////////////////
 
 // PUT - Create a New Player
 app.put('/players', async (req, res) => {
@@ -123,7 +123,7 @@ app.delete('/players/id/:id', async (req, res) => {
     }
 });
 
-// TEAMS TABLE OPERATIONS ///////////////////////////////////////////////////////////////
+// #TEAMS TABLE OPERATIONS ///////////////////////////////////////////////////////////////
 
 // PUT - Create a New Team
 app.put('/teams', async (req, res) => {
@@ -225,7 +225,7 @@ app.delete('/teams/:id', async (req, res) => {
     }
 });
 
-// FIXTURES TABLE OPERATIONS ///////////////////////////////////////////////////////////////
+// #FIXTURES TABLE OPERATIONS ///////////////////////////////////////////////////////////////
 
 //PUT - initialize tournament schedule
 app.put('/fixtures', async (req, res) => {
@@ -248,8 +248,8 @@ app.put('/fixtures', async (req, res) => {
   
           for (const team of group) {
             await pool.query(
-              'INSERT INTO fixtures (round, "group", team, points) VALUES ($1, $2, $3, $4)',
-              [roundNumber, groupNumber, team.id, 0]
+              'INSERT INTO fixtures (round, "group", team, points, calibrationfactor) VALUES ($1, $2, $3, $4, $5)',
+              [roundNumber, groupNumber, team.id, 0, team.calibrationfactor] // Include calibrationfactor
             );
           }
         }
@@ -263,6 +263,7 @@ app.put('/fixtures', async (req, res) => {
       res.status(500).json({ error: 'An error occurred while saving the fixtures' });
     }
   });
+
 
 //GET - fetch fixtures and scores IS THIS IN USE?!
 app.get('/fixtures', async (req, res) => {
@@ -284,7 +285,7 @@ app.get('/fixtures/round/:roundNumber', async (req, res) => {
     const { roundNumber } = req.params;
     try {
         const result = await pool.query(`
-            SELECT f."group", f.team AS team_id, t.name AS team, f.points
+            SELECT f."group", f.team AS team_id, t.name AS team, f.points, f.calibrationfactor, f.pointscalibrated
             FROM fixtures f
             JOIN teams t ON f.team = t.id
             WHERE f.round = $1
@@ -301,14 +302,14 @@ app.get('/fixtures/round/:roundNumber', async (req, res) => {
 // PUT - update points for a specific team in a specific round
 app.put('/fixtures/round/:roundNumber/team/:teamId', async (req, res) => {
     const { roundNumber, teamId } = req.params;
-    const { points } = req.body; // Expect points to be sent in the request body
+    const { points, pointsCalibrated } = req.body; // Expect points to be sent in the request body
 
     try {
         const result = await pool.query(`
             UPDATE fixtures
-            SET points = $1
-            WHERE round = $2 AND team = $3
-        `, [points, roundNumber, teamId]);
+            SET points = $1, pointscalibrated = $2
+            WHERE round = $3 AND team = $4
+        `, [points, pointsCalibrated, roundNumber, teamId]);
 
         if (result.rowCount === 0) {
             return res.status(404).json({ error: 'Fixture not found for the specified round and team' });
@@ -326,7 +327,7 @@ app.get('/fixtures/round/:roundNumber/points', async (req, res) => {
     const { roundNumber } = req.params;
     try {
         const result = await pool.query(`
-            SELECT team, points 
+            SELECT team, points, pointscalibrated 
             FROM fixtures
             WHERE round = $1
         `, [roundNumber]);
@@ -393,7 +394,7 @@ app.delete('/fixtures', async (req, res) => {
 });
 
 
-// FEATURE_STATE TABLE OPERATIONS ///////////////////////////////////////////////////////////////
+// #FEATURE_STATE TABLE OPERATIONS ///////////////////////////////////////////////////////////////
 
 // Get the current state of the registration-open feature
 app.get('/feature_states/registration-open', async (req, res) => {
