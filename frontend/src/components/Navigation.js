@@ -55,6 +55,7 @@ function Navigation() {
                 </li>
                 <li onClick={() => handleNavigation('/about')}>About</li>
                 <li onClick={() => handleNavigation('/admin-panel')}>Admin</li>
+                <button className='navigation-loginbutton' onClick={() => handleNavigation('/login')}>Login / Register</button>
             </ul>
             </nav>
         </div>

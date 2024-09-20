@@ -7,6 +7,8 @@ import KOTCScheduleCreator from './components/KotcScheduleCreator';
 import KotcTournamentHome from './components/KotcTournamentHome';
 import About from './components/About';
 import AdminPanel from './components/AdminPanel';
+import Login from './components/Login';
+import Register from './components/Register';
 
 function App() {
   return (
@@ -19,6 +21,8 @@ function App() {
               <Route path="/kotc-schedule-creator" element={<KOTCScheduleCreator />} />
               <Route path="/kotc-tournament-home" element={<KotcTournamentHome />} />
               <Route path="/admin-panel" element={<AdminPanel />} />
+              <Route path="/login" element={<Login />} />
+              <Route path='/register' element={<Register />} />
           </Routes>
       </Router>
     </FeatureToggleProvider>

@@ -51,7 +51,7 @@
   
 .kotchfixtures-roundbody {
     grid-area: kotchfixtures-roundbody;
-    
+    display: flex;
 }
 
 

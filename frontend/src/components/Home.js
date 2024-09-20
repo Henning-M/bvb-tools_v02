@@ -27,9 +27,9 @@ function Home() {
           <h1>Home Page</h1>
       </div>
       <div>
-        <button onClick={toggleRegistrationStatus}>
+        {/* <button onClick={toggleRegistrationStatus}>
             {isRegistrationOpen ? 'Close registration' : 'Re-open registration'}
-        </button>
+        </button> */}
       </div>
     </div>
 );

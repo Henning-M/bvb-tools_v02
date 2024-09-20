@@ -27,7 +27,6 @@ function KotcHFixtures() {
 
   return (
     <div className="kotchfixtures-container">
-    {/* <div className="kotchfixtures-container"> */}
     <div className="kotchfixtures-roundnav">
                 <ul>
                     {rounds.map((round, index) => (
@@ -45,7 +44,6 @@ function KotcHFixtures() {
             <KotcHFScoreEntry selectedIndex={selectedIndex}/>
         </div>
         <div className="kotchfixtures-roundfooter"></div>
-    {/* </div> */}
     </div>
 );
 }

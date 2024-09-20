@@ -16,6 +16,12 @@
     text-align: center;
 }
 
+.kotctournamenthome-page-body {
+    grid-area: page-body;
+    display: flex;
+    flex-direction: column;
+}
+
 .kotctournamenthome-page-body-nav {
     grid-area: page-body-nav;
     display: flex;
@@ -53,4 +59,4 @@
     background-color: lightgray;
 }
 
-.kotctournamenthome-page-body { grid-area: page-body; }
+
