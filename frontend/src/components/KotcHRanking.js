@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from 'react-redux';
 import { setPointsType } from "../redux/slices/kotcHRankingSlice";
+import { toggleShowRounds } from "../redux/slices/kotcHRankingSettingSlice";
 import '../styles/KotcHRanking.css';
 
 function KotcHRanking() {
@@ -9,6 +10,7 @@ function KotcHRanking() {
     const [rankingData, setRankingData] = useState([]);
     const dispatch = useDispatch();
     const pointsType = useSelector(state => state.kotcHRanking.pointsType); // Get points type from redux
+    const showRounds = useSelector(state => state.kotcHRankingSettings.showRounds); // Get showRounds state from redux
 
     useEffect(() => {
         const fetchTeams = async () => {
@@ -46,7 +48,7 @@ function KotcHRanking() {
                     totalPoints: 0,
                     calibratedPointsTotal: 0,
                     pointsByRound: {},
-                    calibratedPointsByRound: {}, 
+                    calibratedPointsByRound: {},
                 };
 
                 for (let round = 1; round <= rounds.length; round++) {
@@ -54,12 +56,12 @@ function KotcHRanking() {
                         const response = await fetch(`http://localhost:5000/fixtures/round/${round}/points`);
                         const data = await response.json();
                         const teamPoints = data.find(p => p.team === team.id)?.points || 0;
-                        const teamCalibratedPoints = parseFloat(data.find(p => p.team === team.id)?.pointscalibrated || 0);
+                        const teamCalibratedPoints = parseFloat(data.find(p => p.team === team.id)?.pointscalibrated) || 0;
 
                         teamData.pointsByRound[`points round ${round}`] = teamPoints;
                         teamData.calibratedPointsByRound[`points round ${round}`] = teamCalibratedPoints;
-                        teamData.totalPoints += teamPoints; // Sum total points
-                        teamData.calibratedPointsTotal += teamCalibratedPoints; // Sum total calibrated points
+                        teamData.totalPoints += teamPoints;
+                        teamData.calibratedPointsTotal += teamCalibratedPoints;
                     } catch (error) {
                         console.error(`Error fetching points for team ${team.id} in round ${round}:`, error);
                     }
@@ -77,6 +79,21 @@ function KotcHRanking() {
                 }
             });
 
+            // Assign ranks based on sorted data
+            let currentRank = 1;
+            for (let i = 0; i < newRankingData.length; i++) {
+                if (i > 0 && (
+                    (pointsType === 'calibrated' && newRankingData[i].calibratedPointsTotal === newRankingData[i - 1].calibratedPointsTotal) ||
+                    (pointsType === 'raw' && newRankingData[i].totalPoints === newRankingData[i - 1].totalPoints)
+                )) {
+                    // If current and previous teams have the same score, assign the same rank
+                    newRankingData[i].rank = newRankingData[i - 1].rank; 
+                } else {
+                    newRankingData[i].rank = currentRank; // Assign current rank
+                }
+                currentRank++; // Increment rank for next iteration
+            }
+
             setRankingData(newRankingData);
         };
 
@@ -85,9 +102,12 @@ function KotcHRanking() {
         }
     }, [teams, rounds, pointsType]); // Add pointsType to the dependency array
 
-
     const handlePointsTypeChange = (e) => {
         dispatch(setPointsType(e.target.value)); // Update points type in redux
+    };
+
+    const handleShowRoundsChange = () => {
+        dispatch(toggleShowRounds()); // Toggle the show rounds state in redux
     };
 
     return (
@@ -108,27 +128,36 @@ function KotcHRanking() {
                         type="radio"
                         name="pointsType"
                         value="raw"
-                        checked={pointsType === 'raw'} // Check if calibrated is selected
+                        checked={pointsType === 'raw'} // Check if raw is selected
                         onChange={handlePointsTypeChange}
                     />
                     Raw Points
+                </label>
+                
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={showRounds}
+                        onChange={handleShowRoundsChange}
+                    />
+                    Show rounds
                 </label>
             </div>
             <table className="ranking-table">
                 <thead>
                     <tr>
-                        <th>Position</th>
+                        <th>Rank</th> {/* Changed from Position to Rank */}
                         <th>Team</th>
                         <th>
                             {pointsType === 'calibrated'
                                 ? 'Total Points (calibrated)'
                                 : 'Total Points'}
                         </th>
-                        {rounds.map((round, index) => (
+                        {showRounds && rounds.map((round, index) => (
                             <th key={index}>
                                 {pointsType === 'calibrated' 
-                                    ? `Points Round ${round.round} (calibrated)` 
-                                    : `Points Round ${round.round}`}
+                                    ? `Calibrated Points Round ${round.round}` 
+                                    : `Raw Points Round ${round.round}`}
                             </th>
                         ))}
                     </tr>
@@ -136,14 +165,14 @@ function KotcHRanking() {
                 <tbody>
                     {rankingData.map((team, index) => (
                         <tr key={team.id}>
-                            <td>{index + 1}</td>
+                            <td>{team.rank}</td> {/* Display rank instead of index + 1 */}
                             <td>{team.name}</td>
                             <td>
                                 {pointsType === 'calibrated'
                                     ? team.calibratedPointsTotal
                                     : team.totalPoints}
                             </td>
-                            {rounds.map((round, roundIndex) => (
+                            {showRounds && rounds.map((round, roundIndex) => (
                                 <td key={roundIndex}>
                                     {pointsType === 'calibrated'
                                         ? team.calibratedPointsByRound[`points round ${round.round}`] || 0

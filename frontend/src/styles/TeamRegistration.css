@@ -1,100 +1,54 @@
 .teamregistration-container {
   margin-top: 10vh; /* Making space for Nav */
+  height: 90vh; /* Adjust height to fit the viewport minus the nav space */
   display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 10% 10% 80fr auto; /* Added 'auto' for the new row */
-  gap: 5px 5px;
-  grid-auto-flow: row;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto auto 80vh;
+  gap: 5px;
   grid-template-areas:
-    "page-header page-header"
-    "cLeft-header cRight-header"
-    "cLeft-body cRight-body"
-    "toggleRegistration toggleRegistration";
+    "page-header"
+    "page-body-nav"
+    "page-body";
 }
 
-.teamregistration-page-header {
+.teamregistration-header {
   grid-area: page-header;
   text-align: center;
 }
 
-.teamregistration-cLeft-header {
-  grid-area: cLeft-header;
-  text-align: center;
-}
-
-.teamregistration-cRight-header {
-  grid-area: cRight-header;
-  text-align: center;
-}
-
-.teamregistration-cLeft-body {
+.teamregistration-nav {
+  grid-area: page-body-nav;
   display: flex;
-  flex-direction: column;
+  justify-content: center; /* Center items horizontally */
+  margin: 0;
+  padding: 0;
+}
+
+.teamregistration-nav ul {
+  list-style-type: none; /* Remove bullet points */
+  margin: 0;
+  padding: 0;
+  display: flex;
+}
+
+.teamregistration-nav li {
+  display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-}
-
-.teamregistration-cLeft-body label {
-  margin-bottom: 10px;
-  font-weight: bold;
-}
-
-.teamregistration-cLeft-body input {
-  margin-bottom: 20px;
-  padding: 8px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.teamregistration-cLeft-body button {
   padding: 10px 20px;
-  background-color: #007bff;
-  color: white;
-  border: none;
   cursor: pointer;
-  width: auto;
-  box-sizing: border-box;
+  background-color: white;
+  color: black;
+  border: 1px solid black; /* Optional: adds border to buttons */
+  transition: background-color 0.3s, color 0.3s;
 }
 
-.teamregistration-cLeft-body button:hover {
-  background-color: #0056b3;
+.teamregistration-nav li.selected {
+  background-color: darkgray; /* Dark background for selected item */
+  color: white; /* White text for selected item */
 }
 
-.teamregistration-cRight-body {
-  padding-left: 20%;
-  text-align: center; /* Center the table horizontally */
-}
-
-.teamregistration-team-table {
-  width: 80%;
-  margin: 0 auto; /* Center the table within its container */
-  border-collapse: collapse;
-}
-
-.teamregistration-team-table td {
-  padding: 4px 8px; /* Reduced vertical padding */
-  border: none;
-  line-height: 1.2; /* Adjust line height for compact rows */
-  box-sizing: border-box;
-}
-
-.teamregistration-team-table tr {
-  border-bottom: 1px solid #ddd;
-}
-
-.teamregistration-team-table tr:last-child {
-  border-bottom: none;
-}
-
-.teamregistration-team-table td:last-child {
-  text-align: center;
-  cursor: pointer;
-  color: red;
-}
-
-.teamregistration-toggleRegistration {
-  grid-area: toggleRegistration;
-  text-align: center;
-  padding: 10px;
+/* Optional: hover effect */
+.teamregistration-nav li:hover {
+  background-color: lightgray;
 }

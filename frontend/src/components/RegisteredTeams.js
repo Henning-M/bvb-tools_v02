@@ -1,0 +1,68 @@
+import React, { useState, useEffect } from "react";
+import { useFeatureToggle } from '../contexts/FeatureToggleContext';
+import '../styles/RegisteredTeams.css'
+
+function RegisteredTeams () {
+    const [teams, setTeams] = useState([]);
+    const { isRegistrationOpen } = useFeatureToggle(); // Get feature toggle state
+
+    // Function to fetch all registered teams
+    const fetchTeams = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/teams');
+            const data = await response.json();
+            setTeams(data);
+        } catch (error) {
+            console.error('Error fetching teams:', error);
+        }
+    };
+
+    // Fetch teams when component mounts
+    useEffect(() => {
+        fetchTeams();
+    }, []);
+
+    // Allow removing teams (buttons only displayed when registration is open)
+    const handleRemoveTeam = async (teamId) => {
+        try {
+            const response = await fetch(`http://localhost:5000/teams/${teamId}`, {
+                method: 'DELETE',
+            });
+    
+            if (!response.ok) {
+                throw new Error('Failed to delete the team');
+            }
+    
+            const data = await response.json();
+            alert(data.message);
+    
+            // Update the teams state to remove the deleted team
+            setTeams((prevTeams) => prevTeams.filter((team) => team.id !== teamId));
+        } catch (error) {
+            console.error('Error deleting team:', error);
+            alert('There was an error deleting the team. Please try again.');
+        }
+    };
+
+    return (
+        <div className="registeredteams-list">
+            <table>
+                <tbody>
+                    {teams.map((team, index) => (
+                        <tr key={team.id}>
+                            <td>{index + 1}</td>
+                            <td>{team.name}</td>
+                            {isRegistrationOpen && (
+                                <td className="remove-button">
+                                    <button onClick={() => handleRemoveTeam(team.id)}>Remove team</button>
+                                </td>
+                            )}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+        </div>
+    )
+}
+
+export default RegisteredTeams;

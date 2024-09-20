@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import Navigation from './Navigation';
-import KotcScTeams from './KotcScTeams';
+import RegisteredTeams from './RegisteredTeams';
 import KotcScConfiguration from './KotcScConfiguration';
 import '../styles/KotcScheduleCreator.css';
 
@@ -17,7 +17,7 @@ function KotcScheduleCreator () {
             case 0:
                 return <KotcScConfiguration />;
             case 1:
-                return <KotcScTeams />;
+                return <RegisteredTeams />;
             default:
                 return null;
         }

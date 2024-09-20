@@ -32,6 +32,9 @@
 }
 
 .kotctournamenthome-page-body-nav li {
+    display: flex;              /*This and the following two should center the text in the nav - untested so far */
+    justify-content: center;
+    align-items: center;
     padding: 10px 20px;
     cursor: pointer;
     background-color: white;

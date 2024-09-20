@@ -1,0 +1,42 @@
+.registeredteams-list {
+    display: flex;
+    justify-content: center; /* Centers the table in the component */
+    padding: 20px;
+}
+
+.registeredteams-list table {
+    border-collapse: collapse; /* Ensures no borders between cells */
+    width: auto; /* Allows the table to adjust its width automatically */
+}
+
+.registeredteams-list td {
+    padding: 10px; /* Adds padding inside each cell */
+    vertical-align: middle; /* Centers content vertically within cells */
+}
+
+.team-number {
+    text-align: right; /* Aligns numbers to the right */
+}
+
+.team-name {
+    text-align: left; /* Aligns team names to the left */
+}
+
+.remove-button button {
+    text-align: center; /* Centers the button in its cell */
+    padding: 5px 10px;
+    margin: 5px;
+    background-color: red; /* Active state */
+    color: white;
+    border: none;
+    cursor: pointer;
+    width: auto;
+    box-sizing: border-box;
+    border-radius: 4px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.remove-button button:hover {
+    background-color: rgb(192, 0, 0); /* Darker shade for hover effect */
+}
