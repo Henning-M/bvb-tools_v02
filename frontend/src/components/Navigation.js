@@ -1,31 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useFeatureToggle } from '../contexts/FeatureToggleContext';
 import '../styles/Navigation.css';
 
 function Navigation() {
     const navigate = useNavigate();
-    const { isRegistrationOpen, setIsRegistrationOpen, isFixturesInDb } = useFeatureToggle();
-
-    useEffect(() => {
-        const fetchRegistrationStatus = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/feature_states/registration-open');
-                const data = await response.json();
-                setIsRegistrationOpen(data.is_enabled);
-            } catch (error) {
-                console.error('Error fetching registration status:', error);
-            }
-        };
-
-        fetchRegistrationStatus();
-    }, [setIsRegistrationOpen]);
+    const { isRegistrationOpen, isFixturesInDb } = useFeatureToggle();
 
     const handleNavigation = (path) => {
         if (isRegistrationOpen && (path === '/kotc-schedule-creator' || path === '/kotc-tournament-home')) {
-            alert("Only available once registration has been closed.");
+            // alert("Only available once registration has been closed.");
+            navigate(path)      //Remove this line to reactivate blocking behaviour again
         } else if (!isRegistrationOpen && !isFixturesInDb && (path === '/kotc-tournament-home')) {
-            alert("Please create and submit schedule first.");
+            // alert("Please create and submit schedule first.");
+            navigate(path)      //Remove this line to reactivate blocking behaviour again
         } else {
             navigate(path);
         }
@@ -54,9 +42,11 @@ function Navigation() {
             <nav>
             <ul>
                 <li onClick={() => handleNavigation('/')}>Home</li>
-                <li className={getNavItemClass('team-registration')} onClick={() => handleNavigation('/team-registration')}>
-                    Team Registration
-                </li>
+                {isRegistrationOpen && (
+                    <li className={getNavItemClass('team-registration')} onClick={() => handleNavigation('/team-registration')}>
+                        Team Registration
+                    </li>
+                )}
                 <li className={getNavItemClass('kotc-schedule-creator')} onClick={() => handleNavigation('/kotc-schedule-creator')}>
                     KOTC Schedule Creator
                 </li>
@@ -64,6 +54,7 @@ function Navigation() {
                     KOTC Tournament
                 </li>
                 <li onClick={() => handleNavigation('/about')}>About</li>
+                <li onClick={() => handleNavigation('/admin-panel')}>Admin</li>
             </ul>
             </nav>
         </div>

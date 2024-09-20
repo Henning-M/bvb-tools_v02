@@ -50,10 +50,10 @@ function RegisteredTeams () {
                 <tbody>
                     {teams.map((team, index) => (
                         <tr key={team.id}>
-                            <td>{index + 1}</td>
-                            <td>{team.name}</td>
+                            <td className="registeredteams-team-number">{index + 1}</td>
+                            <td className="registeredteams-team-name">{team.name}</td>
                             {isRegistrationOpen && (
-                                <td className="remove-button">
+                                <td className="registeredteams-remove-button">
                                     <button onClick={() => handleRemoveTeam(team.id)}>Remove team</button>
                                 </td>
                             )}

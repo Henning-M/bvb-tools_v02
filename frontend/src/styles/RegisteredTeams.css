@@ -14,15 +14,15 @@
     vertical-align: middle; /* Centers content vertically within cells */
 }
 
-.team-number {
+.registeredteams-team-number {
     text-align: right; /* Aligns numbers to the right */
 }
 
-.team-name {
+.registeredteams-team-name {
     text-align: left; /* Aligns team names to the left */
 }
 
-.remove-button button {
+.registeredteams-remove-button button {
     text-align: center; /* Centers the button in its cell */
     padding: 5px 10px;
     margin: 5px;
@@ -37,6 +37,6 @@
     transition: all 0.3s ease;
 }
 
-.remove-button button:hover {
+.registeredteams-remove-button button:hover {
     background-color: rgb(192, 0, 0); /* Darker shade for hover effect */
 }

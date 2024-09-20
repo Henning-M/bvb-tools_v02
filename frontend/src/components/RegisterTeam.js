@@ -54,7 +54,6 @@ function RegisterTeam() {
         }
     };
 
-
     // REGISTER A TEAM ///////////////////////////////////////////////////////////////
 
     // Handle the register button click

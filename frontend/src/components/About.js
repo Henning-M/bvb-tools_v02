@@ -30,7 +30,7 @@ const About = () => {
                                 <li>Important: Service errors do NOT count as a point for the king side team. The game just continues
                                      with the next challenger side team serving.
                                 </li>
-                                <li>Eitquette: since time is critical (especially for teams with few points), players should never 
+                                <li>Etiquette: since time is critical (especially for teams with few points), players should never 
                                     deliberately delay the game, e.g. by taking a long time to serve. The team losing the rally should 
                                     further always recover the ball immediately after the rally, so no time is lost fetching it
                                 </li>

@@ -225,23 +225,23 @@ function KotcScConfiguration () {
         }
       };
 
-      const handleClearSchedule = async() => {
-        try {
-            const response = await fetch('http://localhost:5000/fixtures', {
-                method: 'DELETE',
-            });
+    const handleClearSchedule = async() => {
+    try {
+        const response = await fetch('http://localhost:5000/fixtures', {
+            method: 'DELETE',
+        });
 
-            if (!response.ok) {
-                throw new Error('Failed to clear schedule');
-            } else {
-                alert('Schedule cleared')
-                setIsFixturesInDb(false); // Reset this when the schedule is cleared
-            };
-        } catch (error) {
-            console.error('Error clearing schedule:', error);
-            alert('There was an error clearing the schedule. Please try again.');
-        }
-      };
+        if (!response.ok) {
+            throw new Error('Failed to clear schedule');
+        } else {
+            alert('Schedule cleared')
+            setIsFixturesInDb(false); // Reset this when the schedule is cleared
+        };
+    } catch (error) {
+        console.error('Error clearing schedule:', error);
+        alert('There was an error clearing the schedule. Please try again.');
+    }
+    };
 
     // Function to determine button states
     const getButtonState = (buttonType) => {

@@ -46,7 +46,7 @@ nav ul li.visually-inactive:hover {
 /* Inactive state */
 nav ul li.inactive {
     color: #888;
-    cursor: not-allowed;
+    cursor: pointer; /* Change to 'not-allowed' to disable clicking */
 }
 
 nav ul li.inactive:hover {

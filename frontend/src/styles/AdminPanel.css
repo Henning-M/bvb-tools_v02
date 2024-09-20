@@ -1,0 +1,46 @@
+.adminpanel-container {
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    margin-top: 10vh; /*Making space for Nav */
+}
+
+.adminpanel-table {
+    border-collapse: collapse; /* Ensures no borders between cells */
+    width: 80%; /* Allows the table to adjust its width automatically */
+}
+
+.adminpanel-table thead {
+    background-color: lightgray;
+}
+
+.adminpanel-table th {
+    padding: 10px 0px;
+}
+
+.adminpanel-table td {
+    padding: 10px; /* Adds padding inside each cell */
+    vertical-align: middle; /* Centers content vertically within cells */
+}
+
+.adminpanel-table-feature {
+    font-weight: 600;
+}
+
+.adminpanel-table-description {
+    text-align: left;
+    font-weight: 350;
+}
+
+.adminpanel-table-description a {
+    text-decoration: none;
+}
+
+.adminpanel-table-controls button {
+
+}
+
+.adminpanel-table-status {
+    font-weight: 350;
+}
