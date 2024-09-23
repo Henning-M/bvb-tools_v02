@@ -575,6 +575,35 @@ app.get('/feature_states/fixturesindb', async (req, res) => {
 });
 
 
+// Get the current state of the tournament-live feature
+app.get('/feature_states/tournament-live', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT is_enabled FROM feature_states WHERE feature_name = $1', ['tournament-live']);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Feature not found' });
+        }
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error fetching feature state:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+// Toggle the state of the tournament-live feature
+app.post('/feature_states/tournament-live/toggle', async (req, res) => {
+    try {
+        const result = await pool.query('UPDATE feature_states SET is_enabled = NOT is_enabled WHERE feature_name = $1 RETURNING is_enabled', ['tournament-live']);
+        if (result.rows.length === 0) {
+            return res.status(404).json({ error: 'Feature not found' });
+        }
+        res.json(result.rows[0]);
+    } catch (error) {
+        console.error('Error toggling feature state:', error);
+        res.status(500).json({ error: 'Server error' });
+    }
+});
+
+
 
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);

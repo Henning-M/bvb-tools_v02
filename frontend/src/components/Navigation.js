@@ -8,7 +8,7 @@ import '../styles/Navigation.css';
 function Navigation() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
-    const { isRegistrationOpen, isFixturesInDb } = useFeatureToggle();
+    const { isRegistrationOpen, isFixturesInDb, isTournamentLive } = useFeatureToggle();
     const { user, isLoggedIn } = useSelector((state) => state.user);
 
     const handleLogout = async () => {
@@ -72,9 +72,9 @@ function Navigation() {
                 {isLoggedIn && user.isadmin && (<li className={getNavItemClass('kotc-schedule-creator')} onClick={() => handleNavigation('/kotc-schedule-creator')}>
                     KOTC Schedule Creator
                 </li>)}
-                <li className={getNavItemClass('kotc-tournament')} onClick={() => handleNavigation('/kotc-tournament-home')}>
+                {isTournamentLive && (<li className={getNavItemClass('kotc-tournament')} onClick={() => handleNavigation('/kotc-tournament-home')}>
                     KOTC Tournament
-                </li>
+                </li>)}
                 <li onClick={() => handleNavigation('/about')}>About</li>
                 {isLoggedIn && (<li onClick={() => handleNavigation('/userdashboard')}>Dashboard</li>)}
                 {isLoggedIn && user.isadmin && (

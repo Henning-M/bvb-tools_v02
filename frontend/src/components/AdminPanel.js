@@ -7,8 +7,10 @@ import '../styles/AdminPanel.css'
 
 function AdminPanel () {
 
+    // Use the context
     const { isRegistrationOpen, setIsRegistrationOpen } = useFeatureToggle();
-    const { isFixturesInDb, setIsFixturesInDb } = useFeatureToggle(); // Use the context
+    const { isFixturesInDb, setIsFixturesInDb } = useFeatureToggle();
+    const { isTournamentLive, setIsTournamentLive } = useFeatureToggle();
 
     const navigate = useNavigate();
     const { user } = useSelector((state) => state.user);
@@ -53,6 +55,19 @@ function AdminPanel () {
     }
     };
 
+    // Function to toggle tournament-live
+  const toggleTournamentLive = async () => {
+    try {
+        const response = await fetch('http://localhost:5000/feature_states/tournament-live/toggle', {
+            method: 'POST',
+        });
+        const data = await response.json();
+        setIsTournamentLive(data.is_enabled);
+    } catch (error) {
+        console.error('Error toggling registration status:', error);
+    }
+  };
+
 
     return (
         <div>
@@ -95,6 +110,18 @@ function AdminPanel () {
                             </td>
                             <td className="adminpanel-table-status">
                                 {isFixturesInDb ? 'Database currently holds a schedule' : 'No schedule in the database'}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td className="adminpanel-table-feature">Activate Tournament</td>
+                            <td className="adminpanel-table-description">Makes the Tournamen Home available to users so everybody can see the schedule, update scores, and check the current ranking.</td>
+                            <td className="adminpanel-table-controls">
+                                <button onClick={toggleTournamentLive}>
+                                    {isTournamentLive ? 'Set offline' : 'Set "Live"'}
+                                </button>
+                            </td>
+                            <td className="adminpanel-table-status">
+                                {isTournamentLive ? 'Tournament is live' : 'Tournament is offline'}
                             </td>
                         </tr>
                         {/* <tr>

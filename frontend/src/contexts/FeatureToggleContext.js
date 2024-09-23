@@ -6,10 +6,11 @@ const FeatureToggleContext = createContext();
 export const FeatureToggleProvider = ({ children }) => {
   const [isRegistrationOpen, setIsRegistrationOpen] = useState(true);
   const [isFixturesInDb, setIsFixturesInDb] = useState(false);
+  const [isTournamentLive, setIsTournamentLive] = useState(true);
 
   useEffect(() => {
     const checkFeatureState = async () => {
-      //Check for registration-open
+      //Check for isRegistrationOpen
       try {
         const response = await fetch('httP://localhost:5000/feature_states/registration-open');
         const data = await response.json();
@@ -18,7 +19,7 @@ export const FeatureToggleProvider = ({ children }) => {
         console.error('Error fetching status of isRegistrationOpen:', error);
       };
 
-      //Check for fixturesInDb
+      //Check for isFixturesInDb
       try {
         const response = await fetch('http://localhost:5000/feature_states/fixturesInDb');
         const data = await response.json();
@@ -26,13 +27,23 @@ export const FeatureToggleProvider = ({ children }) => {
       } catch (error) {
         console.error('Error fetching fixturesInDb status:', error);
       };
+
+      //Check for tournamentLive
+      try {
+        const response = await fetch('http://localhost:5000/feature_states/tournament-live');
+        const data = await response.json();
+        setIsTournamentLive(data.is_enabled);
+      } catch (error) {
+        console.error('Error fetching status of isTournamentLive:', error);
+      };
+
     };
 
     checkFeatureState();
   }, []);
 
   return (
-    <FeatureToggleContext.Provider value={{ isRegistrationOpen, setIsRegistrationOpen, isFixturesInDb, setIsFixturesInDb }}>
+    <FeatureToggleContext.Provider value={{ isRegistrationOpen, setIsRegistrationOpen, isFixturesInDb, setIsFixturesInDb, isTournamentLive, setIsTournamentLive }}>
       {children}
     </FeatureToggleContext.Provider>
   );
