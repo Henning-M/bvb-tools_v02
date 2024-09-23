@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
-import { useDispatch } from 'react-redux'
+// import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux'
+import { setUser, setError } from '../redux/slices/userSlice';
 import Navigation from './Navigation';
 import '../styles/Login.css';
 
@@ -11,9 +13,47 @@ function Login() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
 
-    const handleLogin = async (event) => {
+    const error = useSelector((state) => state.user.error);     // Access error from Redux store
 
-    }
+    const handleLogin = async (e) => {
+        e.preventDefault();
+        
+        try {
+          const response = await fetch('http://localhost:5000/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            credentials: 'include', // Ensure cookies are sent
+            body: JSON.stringify({ username, password }),
+          });
+
+          // Check if the response is OK (status in the range 200-299)
+          if (!response.ok) {
+            const result = await response.json();
+            throw new Error(result.error || 'Login failed');
+          }
+
+          // Now safely parse the JSON response
+          const result = await response.json();
+          const { user } = result;
+          
+          // Dispatch the user data to Redux
+          dispatch(setUser({
+            id: user.id,
+            username: user.username,
+            isadmin: user.isadmin
+          }));
+          
+          // Redirect to the user dashboard after successful login
+          navigate('/userdashboard');
+          
+        } catch (error) {
+          console.error('Login failed:', error);
+          dispatch(setError('Invalid username or password'));
+        }
+      };
+          
 
 
     return (
@@ -38,6 +78,7 @@ function Login() {
                     />
                     <button type="submit">Login</button>
                 </form>
+                {error && <p className="error">{error}</p>}  {/* Display error if exists */}
                 <p>
                     Don't have an account? <Link to="/register">Register here</Link>
                 </p>

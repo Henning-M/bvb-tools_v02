@@ -1,4 +1,7 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useDispatch } from 'react-redux';
+import axios from 'axios';
+import { setUser } from './redux/slices/userSlice';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { FeatureToggleProvider } from './contexts/FeatureToggleContext';
 import Home from './components/Home';
@@ -9,8 +12,28 @@ import About from './components/About';
 import AdminPanel from './components/AdminPanel';
 import Login from './components/Login';
 import Register from './components/Register';
+import UserDashboard from './components/UserDashboard';
+
+
 
 function App() {
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    axios.get('http://localhost:5000/session', { withCredentials: true })
+      .then((response) => {
+        const { user } = response.data;
+        if (user) {
+          dispatch(setUser(user));
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching session:', error);
+      });
+}, [dispatch]);
+
+
   return (
     <FeatureToggleProvider>
       <Router>
@@ -23,6 +46,7 @@ function App() {
               <Route path="/admin-panel" element={<AdminPanel />} />
               <Route path="/login" element={<Login />} />
               <Route path='/register' element={<Register />} />
+              <Route path='/userdashboard' element={<UserDashboard />} />
           </Routes>
       </Router>
     </FeatureToggleProvider>

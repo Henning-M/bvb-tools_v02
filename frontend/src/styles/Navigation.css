@@ -74,3 +74,20 @@
 .navigation-loginbutton:hover {
     background-color: #0056b3; /* Darker shade for hover effect */
 }
+
+/* Logout button styling */
+.navigation-logoutbutton {
+    padding: 10px 20px; /* Same padding as other buttons */
+    margin-left: auto; /* Pushes this button to the right */
+    background-color: red; /* Background color */
+    color: white; /* Text color */
+    border: none; /* No border */
+    cursor: pointer; /* Pointer cursor on hover */
+    border-radius: 4px; /* Rounded corners */
+    font-size: 16px; /* Font size */
+    transition: all 0.3s ease; /* Smooth transition for hover effects */
+}
+
+.navigation-logoutbutton:hover {
+    background-color: rgb(192, 0, 0); /* Darker shade for hover effect */
+}

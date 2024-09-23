@@ -1,11 +1,33 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import { useFeatureToggle } from '../contexts/FeatureToggleContext';
+import { logout } from '../redux/slices/userSlice';
 import '../styles/Navigation.css';
 
 function Navigation() {
     const navigate = useNavigate();
+    const dispatch = useDispatch();
     const { isRegistrationOpen, isFixturesInDb } = useFeatureToggle();
+    const { user, isLoggedIn } = useSelector((state) => state.user);
+
+    const handleLogout = async () => {
+        try {
+            const response = await fetch('http://localhost:5000/logout', {
+                method: 'POST',
+                credentials: 'include', // Ensure cookies are cleared
+            });
+            if (response.ok) {
+                // Dispatch the logout action to clear the state
+                dispatch(logout());
+                navigate('/login');
+            } else {
+                console.error('Logout failed');
+            }
+        } catch (error) {
+            console.error('Error during logout:', error);
+        }
+    };
 
     const handleNavigation = (path) => {
         if (isRegistrationOpen && (path === '/kotc-schedule-creator' || path === '/kotc-tournament-home')) {
@@ -47,15 +69,24 @@ function Navigation() {
                         Team Registration
                     </li>
                 )}
-                <li className={getNavItemClass('kotc-schedule-creator')} onClick={() => handleNavigation('/kotc-schedule-creator')}>
+                {isLoggedIn && user.isadmin && (<li className={getNavItemClass('kotc-schedule-creator')} onClick={() => handleNavigation('/kotc-schedule-creator')}>
                     KOTC Schedule Creator
-                </li>
+                </li>)}
                 <li className={getNavItemClass('kotc-tournament')} onClick={() => handleNavigation('/kotc-tournament-home')}>
                     KOTC Tournament
                 </li>
                 <li onClick={() => handleNavigation('/about')}>About</li>
-                <li onClick={() => handleNavigation('/admin-panel')}>Admin</li>
-                <button className='navigation-loginbutton' onClick={() => handleNavigation('/login')}>Login / Register</button>
+                {isLoggedIn && (<li onClick={() => handleNavigation('/userdashboard')}>Dashboard</li>)}
+                {isLoggedIn && user.isadmin && (
+                    <li onClick={() => handleNavigation('/admin-panel')}>Admin</li>
+                )}
+                {isLoggedIn ? (
+                        <button className="navigation-logoutbutton" onClick={handleLogout}>Logout</button>
+                    ) : (
+                        <button className="navigation-loginbutton" onClick={() => handleNavigation('/login')}>
+                            Login / Register
+                        </button>
+                    )}
             </ul>
             </nav>
         </div>

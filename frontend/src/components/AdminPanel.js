@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useFeatureToggle } from "../contexts/FeatureToggleContext";
 import Navigation from "./Navigation";
@@ -6,9 +7,19 @@ import '../styles/AdminPanel.css'
 
 function AdminPanel () {
 
-    const navigate = useNavigate();
     const { isRegistrationOpen, setIsRegistrationOpen } = useFeatureToggle();
     const { isFixturesInDb, setIsFixturesInDb } = useFeatureToggle(); // Use the context
+
+    const navigate = useNavigate();
+    const { user } = useSelector((state) => state.user);
+    // const userState = useSelector((state) => state.user);       //Access the user state
+    // const { isLoggedIn, user } = userState;                     //Destructure values
+
+    // Redirect if the user is not an admin
+    if (!user || !user.isadmin) {
+        navigate('/')
+        return null;
+    };
 
     // Function to toggle registration status
   const toggleRegistrationStatus = async () => {

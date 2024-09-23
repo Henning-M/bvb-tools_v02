@@ -1,13 +1,149 @@
 const express = require('express');
 const app = express();
-const pool = require('./db');
+const pool = require('./db'); // Database connection
 const port = 5000;
 const cors = require('cors');
+const bcrypt = require('bcrypt');
+
+require('dotenv').config(); // Load environment variables
+
+//Following imports for authentication and session management
+const session = require('express-session');
+const passport = require('passport');
+
+const pgSession = require('connect-pg-simple')(session);
+
+/////////////////////////////////////////////////////////////
+
 
 // Enable CORS
-app.use(cors());
+app.use(cors({
+    origin: 'http://localhost:3000', // Your frontend URL
+    credentials: true // Allow credentials (cookies) to be sent
+}));
 
+// Middleware
 app.use(express.json());
+
+
+// SESSION AND AUTHENTICATION ///////////////////////////////////////////////////////////////
+
+// Configure express-session
+app.use(
+  session({
+    store: new pgSession({
+      pool,
+      tableName: 'session',
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      httpOnly: true,
+      sameSite: 'lax', // Using cookie for persisting login state fails when this is 'None'
+      secure: false, // Set to `true` in production (for HTTPS)
+    },
+  })
+);
+
+  
+// Import passport configuration
+const initializePassport = require('./passport-config');
+initializePassport(passport); // Call the function to set up Passport
+
+// Initialize Passport: Add passport initialization and session management
+app.use(passport.initialize());
+app.use(passport.session());
+
+
+// USER REGISTRATION AND LOGIN ///////////////////////////////////////////////////////////////
+
+// Registration route
+app.post('/register', async (req, res) => {
+    const { username, password } = req.body;
+    
+    try {
+        // Hash the password
+        const hashedPassword = await bcrypt.hash(password, 10);
+        
+        // Insert new user into the database
+        const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [username, hashedPassword]);
+        
+        res.status(201).json({ message: 'User registered successfully', user: result.rows[0] });
+    } catch (err) {
+        console.error('Registration error:', err.message); // Log the error message to the console
+        res.status(500).json({ error: 'Error registering user' });
+    }
+});
+
+// Login route
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+  
+    try {
+      // Fetch user from the database
+      const result = await pool.query('SELECT * FROM users WHERE username = $1', [username]);
+      const user = result.rows[0];
+  
+      if (!user) {
+        return res.status(401).json({ error: 'Invalid username or password' });
+      }
+  
+      // Compare the hashed password
+      const isMatch = await bcrypt.compare(password, user.password);
+  
+      if (!isMatch) {
+        return res.status(401).json({ error: 'Invalid username or password' });
+      }
+  
+      // Store user info in the session (excluding sensitive data like password)
+      req.session.user = {
+        id: user.id,
+        username: user.username,
+        isadmin: user.isadmin,
+      };
+
+    //   console.log('Session after login:', req.session); // Log session data
+
+      req.session.save((err) => {
+        if (err) {
+          console.error('Error saving session:', err);
+        }
+        res.json({ message: 'Login successful', user: req.session.user });
+      });
+  
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+  });
+
+// For frontend to check for active session
+app.get('/session', (req, res) => {
+    // console.log('Session on /session GET:', req.session);  // Log session to confirm user is present
+    if (req.session.user) {
+        // console.log('User found in session:', req.session.user);
+        res.json({ user: req.session.user });
+    } else {
+    //   console.log('No user in session');
+      res.json({ user: null });
+    }
+  });
+  
+
+  // Logout route
+  app.post('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Failed to log out' });
+        }
+        res.clearCookie('connect.sid'); // Ensure the session cookie is cleared
+        res.status(200).json({ message: 'Logout successful' });
+    });
+});
+ 
+  
 
 
 // #PLAYERS TABLE OPERATIONS ///////////////////////////////////////////////////////////////

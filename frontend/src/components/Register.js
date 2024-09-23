@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import axios from 'axios';
 import Navigation from './Navigation';
-// import { useDispatch } from 'react-redux';
-// import { loginSuccess } from '../redux/actions'; // Import Redux action
+import { useDispatch, useSelector } from 'react-redux';
+import { setUser, setError } from '../redux/slices/userSlice';
 import '../styles/Register.css';
 
 function Register () {
@@ -11,11 +12,35 @@ function Register () {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const navigate = useNavigate();
-//   const dispatch = useDispatch(); // Get the dispatch function from Redux
+  const dispatch = useDispatch();
 
-  const handleRegister = async (event) => {
-    
-  };
+  const error = useSelector((state) => state.user.error);     // Access error from Redux store
+
+const handleRegister = async (event) => {
+  event.preventDefault(); // Prevent default form submission
+
+  if (password !== confirmPassword) {
+      dispatch(setError('Passwords do not match'));
+      return;
+  }
+
+  try {
+      const response = await axios.post('http://localhost:5000/register', {
+          username,
+          password,
+      });
+
+      if(response.user.data) {
+        dispatch(setUser(response.user.data));    // Dispatch user data to store
+        navigate('/');                            // Navigate somewhere
+      } else {
+        dispatch(setError(response.data.message || 'Registration failed'));
+      }
+  } catch (error) {
+      dispatch(setError('Registration failed. Please try again.'));
+  }
+};
+
 
   return (
     <div>
@@ -46,6 +71,7 @@ function Register () {
             />
             <button type="submit">Register</button>
         </form>
+        {error && <p className="error">{error}</p>}  {/* Display error if exists */}
         <p>
             Already have an account? <Link to="/login">Login here</Link>
         </p>
