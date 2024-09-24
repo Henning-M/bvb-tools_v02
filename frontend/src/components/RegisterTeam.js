@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useFeatureToggle } from '../contexts/FeatureToggleContext';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom';
 import Navigation from './Navigation';
 import '../styles/RegisterTeam.css';
 
 function RegisterTeam() {
-    const navigate = useNavigate();
+    // const navigate = useNavigate();
     const [player1Name, setPlayer1Name] = useState('');
     const [player2Name, setPlayer2Name] = useState('');
     const { isRegistrationOpen, setIsRegistrationOpen } = useFeatureToggle();
@@ -42,17 +42,17 @@ function RegisterTeam() {
     // MANAGE STATE OF REGISTRATION-OPEN IN DB ///////////////////////////////////////////////////////////////
 
     // Function to toggle registration status
-    const toggleRegistrationStatus = async () => {
-        try {
-            const response = await fetch('http://localhost:5000/feature_states/registration-open/toggle', {
-                method: 'POST',
-            });
-            const data = await response.json();
-            setIsRegistrationOpen(data.is_enabled);
-        } catch (error) {
-            console.error('Error toggling registration status:', error);
-        }
-    };
+    // const toggleRegistrationStatus = async () => {
+    //     try {
+    //         const response = await fetch('http://localhost:5000/feature_states/registration-open/toggle', {
+    //             method: 'POST',
+    //         });
+    //         const data = await response.json();
+    //         setIsRegistrationOpen(data.is_enabled);
+    //     } catch (error) {
+    //         console.error('Error toggling registration status:', error);
+    //     }
+    // };
 
     // REGISTER A TEAM ///////////////////////////////////////////////////////////////
 
@@ -163,23 +163,23 @@ function RegisterTeam() {
                         </>
                     ) : (
                         <div>
-                            <p>Registration is closed.</p>
-                            <a 
-                                href="/kotc-schedule-creator" 
+                            <p>Registration is closed. Schedule, scores and rankings will be available soon.</p>
+                            {/* <a 
+                                href="/kotc-tournament-home" 
                                 onClick={(e) => {
                                     e.preventDefault(); // Prevent default anchor behavior
-                                    navigate('/kotc-schedule-creator'); // Use navigate for SPA routing
+                                    navigate('/kotc-tournament-home'); // Use navigate for SPA routing
                                 }}
                             >
-                                Go to KOTC Schedule Creator
-                            </a>
+                                KOTC Tournament Home
+                            </a> */}
                         </div>
                     )}
                 </div>
                 <div className="registerteam-footer">
-                    <button onClick={toggleRegistrationStatus}>
+                    {/* <button onClick={toggleRegistrationStatus}>
                         {isRegistrationOpen ? 'Close registration' : 'Re-open registration'}
-                    </button>
+                    </button> */}
                 </div>
             </div>
         </div>

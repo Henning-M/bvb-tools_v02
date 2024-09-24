@@ -92,6 +92,40 @@
     font-weight: bold;
 }
 
-/* .kotcscconfiguration-schedulepreview {
-    
-} */
+.kotcscconfiguration-schedulepreview {
+    margin: 20px;
+}
+
+.kotcscconfiguration-schedulepreview a {
+    text-decoration: none;
+}
+
+.kotcscconfiguration-schedule-controls {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.kotcscconfiguration-schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.kotcscconfiguration-schedule-table th,
+.kotcscconfiguration-schedule-table td {
+    border: 1px solid #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.kotcscconfiguration-schedule-table th {
+    background-color: #f2f2f2;
+}
+
+.kotcscconfiguration-schedule-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.kotcscconfiguration-schedule-calibrationfactors {
+    font-weight: 300;
+    font-size: small;
+}

@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { useFeatureToggle } from '../contexts/FeatureToggleContext';
+import { useSelector } from "react-redux";
 import '../styles/RegisteredTeams.css'
 
 function RegisteredTeams () {
     const [teams, setTeams] = useState([]);
     const { isRegistrationOpen } = useFeatureToggle(); // Get feature toggle state
+    const { user } = useSelector((state) => state.user);
 
     // Function to fetch all registered teams
     const fetchTeams = async () => {
@@ -52,7 +54,7 @@ function RegisteredTeams () {
                         <tr key={team.id}>
                             <td className="registeredteams-team-number">{index + 1}</td>
                             <td className="registeredteams-team-name">{team.name}</td>
-                            {isRegistrationOpen && (
+                            {isRegistrationOpen && user && user.isadmin && (
                                 <td className="registeredteams-remove-button">
                                     <button onClick={() => handleRemoveTeam(team.id)}>Remove team</button>
                                 </td>

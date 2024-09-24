@@ -103,6 +103,22 @@ function AdminPanel () {
                             </td>
                         </tr>
                         <tr>
+                            <td className="adminpanel-table-feature">Remove registered team(s)</td>
+                            <td className="adminpanel-table-description">Only the admin role can remove teams that are registered. The registration must be open for this (to avoid conflicts when a tournament schedule is already active).</td>
+                            <td colspan="2" className="adminpanel-table-controls">
+                                {isRegistrationOpen && (<a 
+                                    href="/team-registration" 
+                                    onClick={(e) => {
+                                        e.preventDefault(); // Prevent default anchor behavior
+                                        navigate('/team-registration'); // Use navigate for SPA routing
+                                    }}
+                                >
+                                    Click, select 'Teams registered'
+                                </a>)}
+                            </td>
+                            <td className="adminpanel-table-status"></td>
+                        </tr>
+                        <tr>
                             <td className="adminpanel-table-feature">Clear Schedule</td>
                             <td className="adminpanel-table-description">Deletes any existing game schedule from the database. The schedule can not be recovered, so all fixtures and scores are indefinitely lost when clearing the schedule.</td>
                             <td className="adminpanel-table-controls">

@@ -41,6 +41,10 @@
 
 }
 
+.adminpanel-table-controls a {
+    text-decoration: none;
+}
+
 .adminpanel-table-status {
     font-weight: 350;
 }

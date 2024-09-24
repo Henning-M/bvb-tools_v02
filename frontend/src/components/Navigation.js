@@ -30,12 +30,12 @@ function Navigation() {
     };
 
     const handleNavigation = (path) => {
-        if (isRegistrationOpen && (path === '/kotc-schedule-creator' || path === '/kotc-tournament-home')) {
-            // alert("Only available once registration has been closed.");
-            navigate(path)      //Remove this line to reactivate blocking behaviour again
-        } else if (!isRegistrationOpen && !isFixturesInDb && (path === '/kotc-tournament-home')) {
-            // alert("Please create and submit schedule first.");
-            navigate(path)      //Remove this line to reactivate blocking behaviour again
+        if (isRegistrationOpen && (path === '/kotc-schedule-creator')) {
+            alert('Close registration via admin panel first');
+            // navigate(path)      //Remove this line to reactivate blocking behaviour again
+        } else if (isRegistrationOpen && (path === '/kotc-tournament-home')) {
+            alert('Tournament schedule, scores and rankings will be available here once the registration is closed.');
+            // navigate(path)      //Remove this line to reactivate blocking behaviour again
         } else {
             navigate(path);
         }
@@ -44,8 +44,6 @@ function Navigation() {
     // Determine the classes for each navigation item based on the feature states
     const getNavItemClass = (navItem) => {
         switch (navItem) {
-            case 'team-registration':
-                return isRegistrationOpen ? 'active' : 'visually-inactive';
             case 'kotc-schedule-creator':
                 return isRegistrationOpen ? 'inactive' : 'active';
             case 'kotc-tournament':
@@ -64,11 +62,9 @@ function Navigation() {
             <nav>
             <ul>
                 <li onClick={() => handleNavigation('/')}>Home</li>
-                {isRegistrationOpen && (
-                    <li className={getNavItemClass('team-registration')} onClick={() => handleNavigation('/team-registration')}>
+                <li className={getNavItemClass('team-registration')} onClick={() => handleNavigation('/team-registration')}>
                         Team Registration
-                    </li>
-                )}
+                </li>
                 {isLoggedIn && user.isadmin && (<li className={getNavItemClass('kotc-schedule-creator')} onClick={() => handleNavigation('/kotc-schedule-creator')}>
                     KOTC Schedule Creator
                 </li>)}
@@ -84,7 +80,7 @@ function Navigation() {
                         <button className="navigation-logoutbutton" onClick={handleLogout}>Logout</button>
                     ) : (
                         <button className="navigation-loginbutton" onClick={() => handleNavigation('/login')}>
-                            Login / Register
+                            Login / Register (Admin only)
                         </button>
                     )}
             </ul>

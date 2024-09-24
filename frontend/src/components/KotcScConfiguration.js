@@ -1,10 +1,13 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { setGroups, setRounds, setTeams, setSchedule } from "../redux/slices/kotcScConfigSlice";
 import { useFeatureToggle } from "../contexts/FeatureToggleContext";
 import '../styles/KotcScConfiguration.css'
 
 function KotcScConfiguration () {
+
+    const navigate = useNavigate();
 
     // Access state from Redux store
     const groups = useSelector(state => state.kotcScConfig.groups);
@@ -12,6 +15,7 @@ function KotcScConfiguration () {
     const teams = useSelector(state => state.kotcScConfig.teams);
     const schedule = useSelector(state => state.kotcScConfig.schedule);
     const { isFixturesInDb, setIsFixturesInDb } = useFeatureToggle(); // Use the context
+    const [ showCalibrationFactors, setShowCalibrationFactors ] = useState(true);
 
     // Initialize dispatch
     const dispatch = useDispatch();
@@ -225,23 +229,23 @@ function KotcScConfiguration () {
         }
       };
 
-    const handleClearSchedule = async() => {
-    try {
-        const response = await fetch('http://localhost:5000/fixtures', {
-            method: 'DELETE',
-        });
+    // const handleClearSchedule = async() => {
+    // try {
+    //     const response = await fetch('http://localhost:5000/fixtures', {
+    //         method: 'DELETE',
+    //     });
 
-        if (!response.ok) {
-            throw new Error('Failed to clear schedule');
-        } else {
-            alert('Schedule cleared')
-            setIsFixturesInDb(false); // Reset this when the schedule is cleared
-        };
-    } catch (error) {
-        console.error('Error clearing schedule:', error);
-        alert('There was an error clearing the schedule. Please try again.');
-    }
-    };
+    //     if (!response.ok) {
+    //         throw new Error('Failed to clear schedule');
+    //     } else {
+    //         alert('Schedule cleared')
+    //         setIsFixturesInDb(false); // Reset this when the schedule is cleared
+    //     };
+    // } catch (error) {
+    //     console.error('Error clearing schedule:', error);
+    //     alert('There was an error clearing the schedule. Please try again.');
+    // }
+    // };
 
     // Function to determine button states
     const getButtonState = (buttonType) => {
@@ -296,44 +300,83 @@ function KotcScConfiguration () {
                 onClick={handleSubmitSchedule}>
                 Submit this schedule
             </button>
-            <button 
+            {/* <button 
                 className={`kotcscconfiguration-clearschedule-button ${getButtonState('clear') === 'visually-inactive' ? 'visually-inactive' : ''}`}
                 onClick={handleClearSchedule}>
                 Clear schedule
-            </button>
+            </button> */}
             </div>
             <div className="kotcscconfiguration-schedulepreview">
-                {schedule.length > 0 && (
-                    <ul>
-                        <li>This is a schedule PREVIEW</li>
-                        <li>Click "Create a schedule" again to re-shuffle</li>
-                        <li>"Submit this schedule" to saves the schedule to the database</li>
-                        <li>"Clear schedule" deletes a saved schedule from the database</li>
-                        <li>Once a schedule was submitted, it is saved in the database and <br/>
+            {schedule.length > 0 && (
+                <ul>
+                    <li>This is a schedule PREVIEW</li>
+                    <li>Click "Create a schedule" again to re-shuffle</li>
+                    <li>"Submit this schedule" to save the schedule to the database</li>
+                    {/* <li>"Clear schedule" deletes a saved schedule from the database</li> */}
+                    <li>Once a schedule was submitted, it is saved in the database and <br />
                         you can start your tournament from the 'Tournament Home' (see Navigation)</li>
-                    </ul>
-                )}
-                {schedule.length > 0 ? (
-                    schedule.map((roundObj, roundIndex) => (
-                        <div key={roundIndex}>
-                            <h3>{`Round ${roundIndex + 1}`}</h3>
-                            {roundObj.groups.map((group, groupIndex) => (
-                                <div key={groupIndex} className="group">
-                                    <h4>{`Group ${groupIndex + 1}`}</h4>
-                                    <ul>
-                                        {group.map(team => (
-                                            <li key={team.id}>{team.name}</li>
-                                        ))}
-                                    </ul>
-                                </div>
-                            ))}
-                        </div>
-                    ))
-                ) : (
-                    <p>No schedule created yet.</p>
-                )}
+                    <li>Multiplying scored points of a team with the 'Calibration Factor' <br />
+                        calibrates points for differences in group size (read more about <br />
+                        calibrated points in the respective section in
+                        <a href="/about" onClick={(e) => {
+                                    e.preventDefault(); // Prevent default anchor behavior
+                                    navigate('/about'); // Use navigate for SPA routing
+                        }}> About</a>
+                        </li>
+                </ul>
+            )}
+            <div className="kotcscconfiguration-schedule-controls">
+                <label>
+                    <input
+                        type="checkbox"
+                        checked={showCalibrationFactors}
+                        onChange={() => setShowCalibrationFactors(!showCalibrationFactors)} // Toggle function
+                    />
+                    Display Calibration Factors
+                </label>
             </div>
+            {schedule.length > 0 ? (
+                <table className="kotcscconfiguration-schedule-table">
+                    <tbody>
+                        {schedule.map((roundObj, roundIndex) => (
+                        <React.Fragment key={roundIndex}>
+                            {/* Round Header */}
+                            <tr>
+                                <td colSpan={roundObj.groups.length}>{`Round ${roundIndex + 1}`}</td>
+                            </tr>
+                            {/* Group Headers */}
+                            <tr>
+                                {roundObj.groups.map((_, groupIndex) => (
+                                    <th key={groupIndex}>
+                                        {`Group ${groupIndex + 1}`}
+                                        {showCalibrationFactors && (
+                                            <React.Fragment>
+                                                <br />
+                                                <span className="kotcscconfiguration-schedule-calibrationfactors">{`Calibration Factor ${roundObj.groups[groupIndex][0].calibrationfactor}`}</span>
+                                            </React.Fragment>
+                                        )}
+                                    </th>
+                                ))}
+                            </tr>
+                            {/* Teams */}
+                            {Array.from({ length: Math.max(...roundObj.groups.map(group => group.length)) }).map((_, teamIndex) => (
+                                <tr key={teamIndex}>
+                                    {roundObj.groups.map((group, groupIndex) => (
+                                        <td key={groupIndex}>
+                                            {group[teamIndex] ? group[teamIndex].name : ''}
+                                        </td>
+                                    ))}
+                                </tr>
+                            ))}
+                        </React.Fragment>
+                        ))}
+                    </tbody>
+                </table>
+            ) : (
+                <p>No schedule created yet.</p>
+            )}
         </div>
+    </div>
     );
 };
 
