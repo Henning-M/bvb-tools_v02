@@ -401,8 +401,15 @@ app.put('/fixtures', async (req, res) => {
   });
 
 
-//GET - fetch fixtures and scores IS THIS IN USE?!
+//GET - fetch full fixtures table
 app.get('/fixtures', async (req, res) => {
+    try {
+        const result = await pool.query('SELECT * FROM fixtures ORDER BY round');
+        res.json(result.rows);
+    } catch (error) {
+        console.error('Error fetching fixtures:', error);
+        res.status(500).json({ error: 'Server error '});
+    }
 });
 
 // GET - fetch distinct rounds from fixtures - used for the Nav on KotcHFixtures

@@ -314,7 +314,8 @@ function KotcScConfiguration () {
                     <li>"Submit this schedule" to save the schedule to the database</li>
                     {/* <li>"Clear schedule" deletes a saved schedule from the database</li> */}
                     <li>Once a schedule was submitted, it is saved in the database and <br />
-                        you can start your tournament from the 'Tournament Home' (see Navigation)</li>
+                        you can start your tournament by 'Activating' the Tournament from the <br />
+                        Admin panel and navigating to 'Tournament Home'</li>
                     <li>Multiplying scored points of a team with the 'Calibration Factor' <br />
                         calibrates points for differences in group size (read more about <br />
                         calibrated points in the respective section in

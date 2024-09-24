@@ -91,7 +91,11 @@ function AdminPanel () {
                                     e.preventDefault(); // Prevent default anchor behavior
                                     navigate('/team-registration'); // Use navigate for SPA routing
                                 }}> team registration </a> .
-                                Only when 'Open', teams can register or be removed from the teams list (see e.g. 'Teams registered' in the Team Registration tab). The menu-item 'Team Registration' is automatically hidden when the registration is closed.
+                                Only when 'Open', teams can register or be removed from the teams list (see e.g. 'Teams registered' in the Team Registration tab). Only when 'Closed', the schedule can be created via the 
+                                <a href="/kotc-schedule-creator" onClick={(e) => {
+                                    e.preventDefault(); // Prevent default anchor behavior
+                                    navigate('/kotc-schedule-creator'); // Use navigate for SPA routing
+                                }}> KOTC Schedule Creator</a>.
                             </td>
                             <td className="adminpanel-table-controls">
                             <button onClick={toggleRegistrationStatus}>
@@ -113,7 +117,7 @@ function AdminPanel () {
                                         navigate('/team-registration'); // Use navigate for SPA routing
                                     }}
                                 >
-                                    Click, select 'Teams registered'
+                                    Click here, then select 'Teams registered'
                                 </a>)}
                             </td>
                             <td className="adminpanel-table-status"></td>

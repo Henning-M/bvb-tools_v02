@@ -3,91 +3,125 @@
     top: 0;
     left: 0;
     width: 100%;
-    height: 10vh;
+    min-height: 10vh; /* Minimum height */
     background-color: #333;
     color: white;
     display: flex;
-    align-items: center;
-    justify-content: center;
+    align-items: center; /* Center items vertically */
+    justify-content: space-between; /* Space between burger menu and nav */
+    padding: 0 20px;
     z-index: 1000;
-}
-
-.navigation-container nav ul {
+  }
+  
+  .burger-menu {
+    display: none; /* Hidden by default */
+    cursor: pointer;
+  }
+  
+  .burger-menu .bar {
+    width: 25px;
+    height: 3px;
+    background-color: white;
+    margin: 5px 0; /* Space between bars */
+  }
+  
+  nav {
+    flex-grow: 1; /* Allow nav to take available space */
+  }
+  
+  .nav-items {
     list-style-type: none;
-    display: flex;
-    gap: 20px;
-    width: 100%; /* Make sure the ul takes full width */
-    justify-content: space-between; /* Distribute space between items */
-    padding: 0;
-}
-
-.navigation-container nav ul li {
+    display: flex; /* Default to horizontal layout */
+    gap: 20px; /* Space between items */
+    align-items: center; /* Vertically center the nav items */
+  }
+  
+  .nav-items li {
     cursor: pointer;
     font-size: 1.2em;
-    display: flex;
-    align-items: center;
-}
-
-.navigation-container nav ul li:hover {
+  }
+  
+  .nav-items li:hover {
     text-decoration: underline;
-}
-
-/* Active state */
-.navigation-container nav ul li.active {
-    color: white; /* Default active color */
-}
-
-/* Visually-inactive state */
-.navigation-container nav ul li.visually-inactive {
-    color: #888;
-    opacity: 0.7;
-}
-
-.navigation-container nav ul li.visually-inactive:hover {
-    text-decoration: underline;
-    cursor: pointer;
-}
-
-/* Inactive state */
-.navigation-container nav ul li.inactive {
-    color: #888;
-    cursor: not-allowed; /* Change to 'not-allowed' to disable clicking */
-}
-
-.navigation-container nav ul li.inactive:hover {
-    text-decoration: none;
-}
-
-/* Login button styling */
-.navigation-loginbutton {
-    padding: 10px 20px; /* Same padding as other buttons */
-    margin-left: auto; /* Pushes this button to the right */
-    background-color: #007bff; /* Active state background color */
-    color: white; /* Text color */
-    border: none; /* No border */
-    cursor: pointer; /* Pointer cursor on hover */
-    border-radius: 4px; /* Rounded corners */
-    font-size: 16px; /* Font size */
-    transition: all 0.3s ease; /* Smooth transition for hover effects */
-}
-
-.navigation-loginbutton:hover {
-    background-color: #0056b3; /* Darker shade for hover effect */
-}
-
-/* Logout button styling */
-.navigation-logoutbutton {
-    padding: 10px 20px; /* Same padding as other buttons */
-    margin-left: auto; /* Pushes this button to the right */
-    background-color: red; /* Background color */
-    color: white; /* Text color */
-    border: none; /* No border */
-    cursor: pointer; /* Pointer cursor on hover */
-    border-radius: 4px; /* Rounded corners */
-    font-size: 16px; /* Font size */
-    transition: all 0.3s ease; /* Smooth transition for hover effects */
-}
-
-.navigation-logoutbutton:hover {
-    background-color: rgb(192, 0, 0); /* Darker shade for hover effect */
-}
+  }
+  
+  /* Button styling */
+  .navigation-buttons {
+      display: flex;
+      align-items: center; /* Vertically center the buttons */
+      margin-left: auto; /* Push buttons to the right */
+  }
+  
+  .navigation-loginbutton,
+  .navigation-logoutbutton {
+      padding: 10px 20px; /* Consistent padding for buttons */
+      background-color: #007bff;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+      font-size: 16px;
+      transition: all .3s ease; /* Smooth transition for hover effects */
+  }
+  
+  /* Media query for mobile responsiveness */
+  @media (max-width: 768px) {
+      .navigation-container {
+          flex-direction: column; /* Stack items vertically */
+          align-items: flex-start; /* Align items to the left */
+          padding-top: 10px; /* Add some top padding */
+          min-height: auto; /* Remove min-height constraint */
+          height:auto; /* Allow height to adjust based on content */
+          z-index :9999; 
+          box-shadow :0px 2px 5px rgba(0,0,0,0.5); 
+          transition : all .3s ease-in-out; 
+          overflow:hidden ; 
+          position :relative ;
+      }
+  
+      .burger-menu {
+          display: block; /* Show burger menu on smaller screens */
+          position: absolute; /* Position it at the top left corner */
+          top: 10px; /* Adjust as needed */
+          left: 20px; /* Adjust as needed */
+      }
+  
+      nav {
+          width: calc(100% - 40px); /* Full width minus padding for burger menu */
+          flex-direction: column; /* Stack items vertically */
+          align-items: flex-start; /* Align items to the left */
+          padding-top: 50px; /* Space for burger menu */
+      }
+  
+      .nav-items {
+          display: none; /* Hide by default */
+          flex-direction: column; /* Stack items vertically when shown */
+          width : calc(100% -40px); /** Ensure full width minus padding */ 
+          margin-top : -10px ; /** Adjust as needed to overlap with burger menu */ 
+      }
+  
+      .nav-items.show {
+          display:flex ; /** Show items when menu is open */ 
+      }
+  
+      .navigation-buttons {
+          justify-content:center ; 
+          margin-top :10px ; 
+          width : calc(100% -40px); /** Ensure button does not exceed screen width */ 
+      }
+      
+      .navigation-loginbutton,
+      .navigation-logoutbutton {
+          width :100%; /** Make buttons full width on mobile */ 
+          box-sizing : border-box ; /** Ensure padding is included in total width */ 
+      }
+  }
+  
+  /* Ensure horizontal centering on wider screens while keeping button alignment right*/
+  @media (min-width:769px) {
+     nav {
+        display:flex ; 
+        justify-content:center ; /** Center nav items horizontally */ 
+        align-items:center ; /** Ensure vertical alignment of nav items and buttons */ 
+     }
+  }

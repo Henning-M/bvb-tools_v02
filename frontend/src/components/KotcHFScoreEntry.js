@@ -9,6 +9,7 @@ function KotcHFScoreEntry({ selectedIndex }) {
     const pointsFromRedux = useSelector(state => state.kotcHFScoreEntry.points) || {}; // Get points from Redux with default value
     const [submittedPoints, setSubmittedPoints] = useState({}); // State to hold submitted points from the database
     const dispatch = useDispatch();
+    const { user } = useSelector((state) => state.user);
 
     const handlePointsChange = (teamId, value) => {
         dispatch(setPoints({ teamId, round: selectedIndex + 1, value })); // Dispatch the action to update points in Redux
@@ -77,7 +78,7 @@ function KotcHFScoreEntry({ selectedIndex }) {
             });
 
             if (response.ok) {
-                alert('Points updated successfully');
+                // alert('Points updated successfully');
                 setSubmittedPoints(prevSubmittedPoints => ({
                     ...prevSubmittedPoints,
                     [teamId]: pointsValue, // Update submitted points in the state
@@ -156,7 +157,8 @@ function KotcHFScoreEntry({ selectedIndex }) {
                         </tr>
                     );
                 })}
-                <tr>
+                {user && user.isadmin && (
+                    <tr>
                         <td colSpan={4}>
                             <button
                                 className="kotchfscoreentry-roundbody-table-button"
@@ -166,6 +168,7 @@ function KotcHFScoreEntry({ selectedIndex }) {
                             </button>
                         </td>
                     </tr>
+                )}
             </tbody>
             </table>
         </div>

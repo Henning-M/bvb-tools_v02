@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { useFeatureToggle } from '../contexts/FeatureToggleContext';
@@ -10,6 +10,11 @@ function Navigation() {
     const dispatch = useDispatch();
     const { isRegistrationOpen, isFixturesInDb, isTournamentLive } = useFeatureToggle();
     const { user, isLoggedIn } = useSelector((state) => state.user);
+
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const toggleMenu = () => {
+        setIsMenuOpen(!isMenuOpen);
+      };
 
     const handleLogout = async () => {
         try {
@@ -59,34 +64,41 @@ function Navigation() {
 
     return (
         <div className="navigation-container">
-            <nav>
-            <ul>
-                <li onClick={() => handleNavigation('/')}>Home</li>
-                <li className={getNavItemClass('team-registration')} onClick={() => handleNavigation('/team-registration')}>
-                        Team Registration
+          <div className="burger-menu" onClick={toggleMenu}>
+            <div className="bar"></div>
+            <div className="bar"></div>
+            <div className="bar"></div>
+          </div>
+          <nav>
+            <ul className={`nav-items ${isMenuOpen ? 'show' : ''}`}>
+              <li onClick={() => handleNavigation('/')}>Home</li>
+              <li className={getNavItemClass('/team-registration')} onClick={() => handleNavigation('/team-registration')}>
+                Team Registration
+              </li>
+              {isLoggedIn && user.isadmin && (
+                <li className={getNavItemClass('/kotc-schedule-creator')} onClick={() => handleNavigation('/kotc-schedule-creator')}>
+                  KOTC Schedule Creator
                 </li>
-                {isLoggedIn && user.isadmin && (<li className={getNavItemClass('kotc-schedule-creator')} onClick={() => handleNavigation('/kotc-schedule-creator')}>
-                    KOTC Schedule Creator
-                </li>)}
-                {isTournamentLive && (<li className={getNavItemClass('kotc-tournament')} onClick={() => handleNavigation('/kotc-tournament-home')}>
-                    KOTC Tournament
-                </li>)}
-                <li onClick={() => handleNavigation('/about')}>About</li>
-                {isLoggedIn && (<li onClick={() => handleNavigation('/userdashboard')}>Dashboard</li>)}
-                {isLoggedIn && user.isadmin && (
-                    <li onClick={() => handleNavigation('/admin-panel')}>Admin</li>
-                )}
-                {isLoggedIn ? (
-                        <button className="navigation-logoutbutton" onClick={handleLogout}>Logout</button>
-                    ) : (
-                        <button className="navigation-loginbutton" onClick={() => handleNavigation('/login')}>
-                            Login / Register (Admin only)
-                        </button>
-                    )}
+              )}
+              {isTournamentLive && (
+                <li className={getNavItemClass('/kotc-tournament')} onClick={() => handleNavigation('/kotc-tournament-home')}>
+                  KOTC Tournament
+                </li>
+              )}
+              <li onClick={() => handleNavigation('/about')}>About</li>
+              {isLoggedIn && <li onClick={() => handleNavigation('/userdashboard')}>Dashboard</li>}
+              {isLoggedIn && user.isadmin && <li onClick={() => handleNavigation('/admin-panel')}>Admin</li>}
+              {isLoggedIn ? (
+                <button className="navigation-logoutbutton" onClick={handleLogout}>Logout</button>
+              ) : (
+                <button className="navigation-loginbutton" onClick={() => handleNavigation('/login')}>
+                  Admin Login
+                </button>
+              )}
             </ul>
-            </nav>
+          </nav>
         </div>
-    );
-}
+      );
+    };
 
 export default Navigation;

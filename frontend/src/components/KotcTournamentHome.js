@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Navigation from './Navigation';
 import KotcHFixtures from './KotcHFixtures';
 import KotcHRanking from './KotcHRanking';
+import KotcHMyTeam from "./KotcHMyTeam";
 import '../styles/KotcTournamentHome.css';
 
 function KotcTournamentHome () {
@@ -19,7 +20,7 @@ function KotcTournamentHome () {
             case 1:
                 return <KotcHRanking />;
             case 2:
-                return 
+                return <KotcHMyTeam />
             default:
                 return null;
         }
@@ -42,11 +43,11 @@ function KotcTournamentHome () {
                     onClick={() => handleClick(1)}>
                     Ranking
                 </li>
-                {/* <li
-                    className={selectedIndex === 1 ? 'selected' : ''}
-                    onClick={() => handleClick(1)}>
-                    Full Schedule
-                </li> */}
+                <li
+                    className={selectedIndex === 2 ? 'selected' : ''}
+                    onClick={() => handleClick(2)}>
+                    My team
+                </li>
             </ul>
         </div>
         <div className="kotctournamenthome-page-body">

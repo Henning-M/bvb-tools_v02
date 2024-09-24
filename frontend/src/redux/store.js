@@ -4,6 +4,7 @@ import kotcHFScoreEntrySlice from './slices/kotcHFScoreEntrySlice';
 import kotcHRankingSlice from './slices/kotcHRankingSlice';
 import kotcHRankingSettingSlice from './slices/kotcHRankingSettingSlice';
 import userSlice from './slices/userSlice';
+import teamSlice from './slices/teamSlice';
 
 export default configureStore({
   reducer: {
@@ -12,5 +13,6 @@ export default configureStore({
     kotcHRanking: kotcHRankingSlice,
     kotcHRankingSettings: kotcHRankingSettingSlice,
     user: userSlice,
+    team: teamSlice,    
   },
 });
