@@ -18,7 +18,7 @@ function Navigation() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('http://localhost:5000/logout', {
+            const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/logout', {
                 method: 'POST',
                 credentials: 'include', // Ensure cookies are cleared
             });

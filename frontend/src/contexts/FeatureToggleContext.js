@@ -12,7 +12,7 @@ export const FeatureToggleProvider = ({ children }) => {
     const checkFeatureState = async () => {
       //Check for isRegistrationOpen
       try {
-        const response = await fetch('httP://localhost:5000/feature_states/registration-open');
+        const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/feature_states/registration-open');
         const data = await response.json();
         setIsRegistrationOpen(data.is_enabled);
       } catch (error) {
@@ -21,7 +21,7 @@ export const FeatureToggleProvider = ({ children }) => {
 
       //Check for isFixturesInDb
       try {
-        const response = await fetch('http://localhost:5000/feature_states/fixturesInDb');
+        const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/feature_states/fixturesInDb');
         const data = await response.json();
         setIsFixturesInDb(data.is_enabled);
       } catch (error) {
@@ -30,7 +30,7 @@ export const FeatureToggleProvider = ({ children }) => {
 
       //Check for tournamentLive
       try {
-        const response = await fetch('http://localhost:5000/feature_states/tournament-live');
+        const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/feature_states/tournament-live');
         const data = await response.json();
         setIsTournamentLive(data.is_enabled);
       } catch (error) {

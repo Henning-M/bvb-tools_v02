@@ -11,7 +11,7 @@ function RegisteredTeams () {
     // Function to fetch all registered teams
     const fetchTeams = async () => {
         try {
-            const response = await fetch('http://localhost:5000/teams');
+            const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/teams');
             const data = await response.json();
             setTeams(data);
         } catch (error) {
@@ -27,7 +27,7 @@ function RegisteredTeams () {
     // Allow removing teams (buttons only displayed when registration is open)
     const handleRemoveTeam = async (teamId) => {
         try {
-            const response = await fetch(`http://localhost:5000/teams/${teamId}`, {
+            const response = await fetch(`http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/teams/${teamId}`, {
                 method: 'DELETE',
             });
     

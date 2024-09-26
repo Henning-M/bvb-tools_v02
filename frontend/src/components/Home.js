@@ -10,7 +10,7 @@ function Home() {
   // // Function to toggle registration status
   // const toggleRegistrationStatus = async () => {
   //   try {
-  //       const response = await fetch('http://localhost:5000/feature_states/registration-open/toggle', {
+  //       const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/feature_states/registration-open/toggle', {
   //           method: 'POST',
   //       });
   //       const data = await response.json();

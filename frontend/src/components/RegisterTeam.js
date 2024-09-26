@@ -27,7 +27,7 @@ function RegisterTeam() {
     // New function to fetch all players
     const fetchAllPlayers = async () => {
         try {
-            const response = await fetch('http://localhost:5000/players');
+            const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/players');
             if (!response.ok) {
                 throw new Error('Failed to fetch players');
             }
@@ -44,7 +44,7 @@ function RegisterTeam() {
     // Function to toggle registration status
     // const toggleRegistrationStatus = async () => {
     //     try {
-    //         const response = await fetch('http://localhost:5000/feature_states/registration-open/toggle', {
+    //         const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/feature_states/registration-open/toggle', {
     //             method: 'POST',
     //         });
     //         const data = await response.json();
@@ -80,7 +80,7 @@ function RegisterTeam() {
         }
 
         const registerPlayer = async (playerName) => {
-            const response = await fetch('http://localhost:5000/players', {
+            const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/players', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: playerName }),
@@ -104,7 +104,7 @@ function RegisterTeam() {
         }
 
         const registerTeam = async () => {
-            const response = await fetch('http://localhost:5000/teams', {
+            const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/teams', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

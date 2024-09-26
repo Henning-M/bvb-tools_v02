@@ -21,7 +21,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get('http://localhost:5000/session', { withCredentials: true })
+    axios.get('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/session', { withCredentials: true })
       .then((response) => {
         const { user } = response.data;
         if (user) {
