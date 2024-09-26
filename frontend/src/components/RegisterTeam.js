@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useFeatureToggle } from '../contexts/FeatureToggleContext';
 // import { useNavigate } from 'react-router-dom';
-import Navigation from './Navigation';
+// import Navigation from './Navigation';
 import '../styles/RegisterTeam.css';
 
 function RegisterTeam() {
@@ -129,7 +129,7 @@ function RegisterTeam() {
 
     return (
         <div>
-        <Navigation />
+        {/* <Navigation /> */}
         
             <div className="registerteam-container">
                 {/* <div className="registerteam-header">
