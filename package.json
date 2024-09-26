@@ -1,10 +1,7 @@
 {
   "dependencies": {
     "react-router-dom": "^6.26.1"
-  }
-}
-
-{
+  },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
@@ -12,4 +9,3 @@
     "eject": "react-scripts eject"
   }
 }
-
