@@ -1,10 +1,11 @@
 const express = require('express');
 const app = express();
 const pool = require('./db'); // Database connection
+const port = 5000;
 const cors = require('cors');
 const bcrypt = require('bcrypt');
+
 require('dotenv').config(); // Load environment variables
-const port = process.env.DB_PORT;
 
 //Following imports for authentication and session management
 const session = require('express-session');
