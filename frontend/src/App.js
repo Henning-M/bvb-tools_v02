@@ -21,7 +21,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/session', { withCredentials: true })
+    axios.get('https://d3ix2aoqy9cq9s.cloudfront.net/session', { withCredentials: true })
       .then((response) => {
         const { user } = response.data;
         if (user) {

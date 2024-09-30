@@ -13,7 +13,7 @@ const KotcHMyTeam = () => {
     useEffect(() => {
         const fetchTeams = async () => {
             try {
-                const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/teams');
+                const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/teams');
                 const data = await response.json();
                 dispatch(setTeams(data));
             } catch (error) {
@@ -28,7 +28,7 @@ const KotcHMyTeam = () => {
     useEffect(() => {
         const fetchFixtures = async () => {
             try {
-                const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/fixtures');
+                const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/fixtures');
                 const data = await response.json();
                 setFixtures(data);
             } catch (error) {

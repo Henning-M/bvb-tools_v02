@@ -25,7 +25,7 @@ const handleRegister = async (event) => {
   }
 
   try {
-      const response = await axios.post('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/register', {
+      const response = await axios.post('https://d3ix2aoqy9cq9s.cloudfront.net/register', {
           username,
           password,
       });

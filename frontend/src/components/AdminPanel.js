@@ -26,7 +26,7 @@ function AdminPanel () {
     // Function to toggle registration status
   const toggleRegistrationStatus = async () => {
     try {
-        const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/feature_states/registration-open/toggle', {
+        const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/feature_states/registration-open/toggle', {
             method: 'POST',
         });
         const data = await response.json();
@@ -39,7 +39,7 @@ function AdminPanel () {
   // Function to clear schedule
   const handleClearSchedule = async() => {
     try {
-        const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/fixtures', {
+        const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/fixtures', {
             method: 'DELETE',
         });
 
@@ -58,7 +58,7 @@ function AdminPanel () {
     // Function to toggle tournament-live
   const toggleTournamentLive = async () => {
     try {
-        const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/feature_states/tournament-live/toggle', {
+        const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/feature_states/tournament-live/toggle', {
             method: 'POST',
         });
         const data = await response.json();

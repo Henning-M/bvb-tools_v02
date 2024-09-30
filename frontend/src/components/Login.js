@@ -19,7 +19,7 @@ function Login() {
         e.preventDefault();
         
         try {
-          const response = await fetch('http://backend-dev22.ap-southeast-1.elasticbeanstalk.com/login', {
+          const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
