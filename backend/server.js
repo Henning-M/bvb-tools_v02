@@ -3,7 +3,7 @@ const app = express();
 const pool = require('./db'); // Database connection
 const port = process.env.PORT || 8080;
 const cors = require('cors');
-const bcrypt = require('bcryptjs');
+const bcrypt = require('bcrypt');
 
 require('dotenv').config(); // Load environment variables
 
