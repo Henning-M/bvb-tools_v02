@@ -1,5 +1,5 @@
 const LocalStrategy = require('passport-local').Strategy;
-const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 const pool = require('./db'); // Assuming you use `pool` for database queries
 
 // Function to configure passport
@@ -17,13 +17,13 @@ function initialize(passport) {
             console.log('User found:', user);
 
             try {
-                const isValid = await bcrypt.compare(password, user.password);
+                const isValid = await argon2.verify(password, user.password);
                 if (!isValid) {
                     return done(null, false, { message: 'Incorrect password.' });
                 }
                 return done(null, user);
             } catch (error) {
-                console.error('Bcrypt compare error:', error);
+                console.error('Argon2 compare error:', error);
                 return done(error);
             }
             

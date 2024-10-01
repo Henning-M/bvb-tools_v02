@@ -3,7 +3,7 @@ const app = express();
 const pool = require('./db'); // Database connection
 const port = process.env.PORT || 8080;
 const cors = require('cors');
-const bcrypt = require('bcrypt');
+const argon2 = require('argon2');
 
 require('dotenv').config(); // Load environment variables
 
@@ -65,7 +65,7 @@ app.post('/register', async (req, res) => {
     
     try {
         // Hash the password
-        const hashedPassword = await bcrypt.hash(password, 10);
+        const hashedPassword = await argon2.hash(password);
         
         // Insert new user into the database
         const result = await pool.query('INSERT INTO users (username, password) VALUES ($1, $2) RETURNING *', [username, hashedPassword]);
@@ -91,7 +91,7 @@ app.post('/login', async (req, res) => {
       }
   
       // Compare the hashed password
-      const isMatch = await bcrypt.compare(password, user.password);
+      const isMatch = await argon2.verify(password, user.password);
   
       if (!isMatch) {
         return res.status(401).json({ error: 'Invalid username or password' });
