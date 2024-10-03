@@ -18,7 +18,7 @@ function KotcHFScoreEntry({ selectedIndex }) {
     useEffect(() => {
         const fetchFixtures = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/fixtures/round/${selectedIndex + 1}`);
+                const response = await fetch(`https://d3ix2aoqy9cq9s.cloudfront.net/fixtures/round/${selectedIndex + 1}`);
                 const data = await response.json();
                 setFixtures(data);
                 fetchSubmittedPoints(data); // Fetch submitted points after fetching fixtures
@@ -30,7 +30,7 @@ function KotcHFScoreEntry({ selectedIndex }) {
 
         const fetchSubmittedPoints = async (fixturesData) => {
             try {
-                const response = await fetch(`http://localhost:5000/fixtures/round/${selectedIndex + 1}/points`);
+                const response = await fetch(`https://d3ix2aoqy9cq9s.cloudfront.net/fixtures/round/${selectedIndex + 1}/points`);
                 const data = await response.json();
                 const pointsMap = fixturesData.reduce((acc, fixture) => {
                     acc[fixture.team_id] = data.find(p => p.team === fixture.team_id)?.points || 0;
@@ -44,7 +44,7 @@ function KotcHFScoreEntry({ selectedIndex }) {
 
         const fetchAcceptingInput = async () => {
             try {
-                const response = await fetch(`http://localhost:5000/fixtures/round/${selectedIndex + 1}/acceptingInput`);
+                const response = await fetch(`https://d3ix2aoqy9cq9s.cloudfront.net/fixtures/round/${selectedIndex + 1}/acceptingInput`);
                 const data = await response.json();
                 setAcceptingInput(data.acceptingInput); // Update the acceptingInput state
             } catch (error) {
@@ -69,7 +69,7 @@ function KotcHFScoreEntry({ selectedIndex }) {
 
 
         try {
-            const response = await fetch(`http://localhost:5000/fixtures/round/${selectedIndex + 1}/team/${teamId}`, {
+            const response = await fetch(`https://d3ix2aoqy9cq9s.cloudfront.net/fixtures/round/${selectedIndex + 1}/team/${teamId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ function KotcHFScoreEntry({ selectedIndex }) {
 
     const handleCloseRound = async () => {
         try {
-            const response = await fetch(`http://localhost:5000/fixtures/round/${selectedIndex + 1}/acceptingInput`, {
+            const response = await fetch(`https://d3ix2aoqy9cq9s.cloudfront.net/fixtures/round/${selectedIndex + 1}/acceptingInput`, {
                 method: 'PUT',
             });
 

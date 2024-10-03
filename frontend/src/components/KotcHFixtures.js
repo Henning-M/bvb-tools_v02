@@ -11,7 +11,7 @@ function KotcHFixtures() {
   useEffect(() => {
     const fetchRounds = async () => {
         try {
-            const response = await fetch('http://localhost:5000/fixtures/rounds');
+            const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/fixtures/rounds');
             const data = await response.json();
             setRounds(data); // Set the rounds state with fetched data
         } catch (error) {

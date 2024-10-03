@@ -18,7 +18,7 @@ const pgSession = require('connect-pg-simple')(session);
 
 // Enable CORS
 app.use(cors({
-    origin: 'http://localhost:3000', // Your frontend URL / Use amplify URL when deploying to AWS - https://master.d1uok82rtkk8si.amplifyapp.com/
+    origin: 'https://master.d1uok82rtkk8si.amplifyapp.com/', // Your frontend URL / Use http://localhost:3000 for local deployment
     credentials: true // Allow credentials (cookies) to be sent
 }));
 
