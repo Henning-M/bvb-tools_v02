@@ -11,7 +11,7 @@ function RegisteredTeams () {
     // Function to fetch all registered teams
     const fetchTeams = async () => {
         try {
-            const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/teams');
+            const response = await fetch('http://localhost:5000/teams');
             const data = await response.json();
             setTeams(data);
         } catch (error) {
@@ -27,7 +27,7 @@ function RegisteredTeams () {
     // Allow removing teams (buttons only displayed when registration is open)
     const handleRemoveTeam = async (teamId) => {
         try {
-            const response = await fetch(`https://d3ix2aoqy9cq9s.cloudfront.net/teams/${teamId}`, {
+            const response = await fetch(`http://localhost:5000/teams/${teamId}`, {
                 method: 'DELETE',
             });
     

@@ -1,3 +1,4 @@
+//Change URL route for requests to https://d3ix2aoqy9cq9s.cloudfront.net/ in AWS
 import React from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -26,7 +27,7 @@ function AdminPanel () {
     // Function to toggle registration status
   const toggleRegistrationStatus = async () => {
     try {
-        const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/feature_states/registration-open/toggle', {
+        const response = await fetch('http://localhost:5000/feature_states/registration-open/toggle', {
             method: 'POST',
         });
         const data = await response.json();
@@ -39,7 +40,7 @@ function AdminPanel () {
   // Function to clear schedule
   const handleClearSchedule = async() => {
     try {
-        const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/fixtures', {
+        const response = await fetch('http://localhost:5000/fixtures', {
             method: 'DELETE',
         });
 
@@ -58,7 +59,7 @@ function AdminPanel () {
     // Function to toggle tournament-live
   const toggleTournamentLive = async () => {
     try {
-        const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/feature_states/tournament-live/toggle', {
+        const response = await fetch('http://localhost:5000/feature_states/tournament-live/toggle', {
             method: 'POST',
         });
         const data = await response.json();

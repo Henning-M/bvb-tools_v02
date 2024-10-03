@@ -13,7 +13,7 @@ const KotcHMyTeam = () => {
     useEffect(() => {
         const fetchTeams = async () => {
             try {
-                const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/teams');
+                const response = await fetch('http://localhost:5000/teams');
                 const data = await response.json();
                 dispatch(setTeams(data));
             } catch (error) {
@@ -28,7 +28,7 @@ const KotcHMyTeam = () => {
     useEffect(() => {
         const fetchFixtures = async () => {
             try {
-                const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/fixtures');
+                const response = await fetch('http://localhost:5000/fixtures');
                 const data = await response.json();
                 setFixtures(data);
             } catch (error) {
@@ -68,7 +68,7 @@ const KotcHMyTeam = () => {
                 </select>
             </div>
             <div className='kotch-myteam-aggregate'>
-                <p>Fill in total points and total calibrated points for selected team + current rank.</p>
+                <p>ToDo: Fill in total points and total calibrated points for selected team + current rank.</p>
             </div>
             {selectedTeam && (
                 <div className="kotch-myteam-body-fixtures-table">

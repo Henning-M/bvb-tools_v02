@@ -21,7 +21,7 @@ function App() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    axios.get('https://d3ix2aoqy9cq9s.cloudfront.net/session', { withCredentials: true })
+    axios.get('http://localhost:5000/session', { withCredentials: true })
       .then((response) => {
         const { user } = response.data;
         if (user) {

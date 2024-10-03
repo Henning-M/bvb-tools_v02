@@ -18,7 +18,7 @@ function Navigation() {
 
     const handleLogout = async () => {
         try {
-            const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/logout', {
+            const response = await fetch('http://localhost:5000/logout', {
                 method: 'POST',
                 credentials: 'include', // Ensure cookies are cleared
             });

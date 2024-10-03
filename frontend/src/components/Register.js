@@ -25,13 +25,13 @@ const handleRegister = async (event) => {
   }
 
   try {
-      const response = await axios.post('https://d3ix2aoqy9cq9s.cloudfront.net/register', {
+      const response = await axios.post('http://localhost:5000/register', {
           username,
           password,
       });
 
-      if(response.user.data) {
-        dispatch(setUser(response.user.data));    // Dispatch user data to store
+      if(response.data.user) {
+        dispatch(setUser(response.data.user));    // Dispatch user data to store
         navigate('/');                            // Navigate somewhere
       } else {
         dispatch(setError(response.data.message || 'Registration failed'));

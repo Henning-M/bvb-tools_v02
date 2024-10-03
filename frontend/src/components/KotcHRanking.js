@@ -15,7 +15,7 @@ function KotcHRanking() {
     useEffect(() => {
         const fetchTeams = async () => {
             try {
-                const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/teams');
+                const response = await fetch('http://localhost:5000/teams');
                 const data = await response.json();
                 setTeams(data);
             } catch (error) {
@@ -25,7 +25,7 @@ function KotcHRanking() {
 
         const fetchRounds = async () => {
             try {
-                const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/fixtures/rounds');
+                const response = await fetch('http://localhost:5000/fixtures/rounds');
                 const data = await response.json();
                 setRounds(data);
             } catch (error) {
@@ -53,7 +53,7 @@ function KotcHRanking() {
 
                 for (let round = 1; round <= rounds.length; round++) {
                     try {
-                        const response = await fetch(`https://d3ix2aoqy9cq9s.cloudfront.net/fixtures/round/${round}/points`);
+                        const response = await fetch(`http://localhost:5000/fixtures/round/${round}/points`);
                         const data = await response.json();
                         const teamPoints = data.find(p => p.team === team.id)?.points || 0;
                         const teamCalibratedPoints = parseFloat(data.find(p => p.team === team.id)?.pointscalibrated) || 0;

@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const pool = require('./db'); // Database connection
-const port = process.env.PORT || 8080;
+const port = 5000; //Change to process.env.PORT || 8080 when deploying to AWS
 const cors = require('cors');
 const argon2 = require('argon2');
 
@@ -18,7 +18,7 @@ const pgSession = require('connect-pg-simple')(session);
 
 // Enable CORS
 app.use(cors({
-    origin: 'https://master.d1uok82rtkk8si.amplifyapp.com/', // Your frontend URL
+    origin: 'http://localhost:3000', // Your frontend URL / Use amplify URL when deploying to AWS - https://master.d1uok82rtkk8si.amplifyapp.com/
     credentials: true // Allow credentials (cookies) to be sent
 }));
 
@@ -91,7 +91,7 @@ app.post('/login', async (req, res) => {
       }
   
       // Compare the hashed password
-      const isMatch = await argon2.verify(password, user.password);
+      const isMatch = await argon2.verify(user.password, password);
   
       if (!isMatch) {
         return res.status(401).json({ error: 'Invalid username or password' });
