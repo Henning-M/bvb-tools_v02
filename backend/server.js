@@ -1,7 +1,7 @@
 const express = require('express');
 const app = express();
 const pool = require('./db'); // Database connection
-const port = 5000; //Change to process.env.PORT || 8080 when deploying to AWS
+const port = process.env.PORT || 8080; //5000 when running locally
 const cors = require('cors');
 const argon2 = require('argon2');
 
