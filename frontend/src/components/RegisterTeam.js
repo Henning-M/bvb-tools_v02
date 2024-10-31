@@ -27,7 +27,7 @@ function RegisterTeam() {
     // New function to fetch all players
     const fetchAllPlayers = async () => {
         try {
-            const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/players');
+            const response = await fetch('https://backend-service-255195242316.us-central1.run.app/players');
             if (!response.ok) {
                 throw new Error('Failed to fetch players');
             }
@@ -44,7 +44,7 @@ function RegisterTeam() {
     // Function to toggle registration status
     // const toggleRegistrationStatus = async () => {
     //     try {
-    //         const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/feature_states/registration-open/toggle', {
+    //         const response = await fetch('https://backend-service-255195242316.us-central1.run.app/feature_states/registration-open/toggle', {
     //             method: 'POST',
     //         });
     //         const data = await response.json();
@@ -80,7 +80,7 @@ function RegisterTeam() {
         }
 
         const registerPlayer = async (playerName) => {
-            const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/players', {
+            const response = await fetch('https://backend-service-255195242316.us-central1.run.app/players', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ name: playerName }),
@@ -104,7 +104,7 @@ function RegisterTeam() {
         }
 
         const registerTeam = async () => {
-            const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/teams', {
+            const response = await fetch('https://backend-service-255195242316.us-central1.run.app/teams', {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({

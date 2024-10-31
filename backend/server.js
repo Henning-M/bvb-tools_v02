@@ -26,6 +26,49 @@ app.use(cors({
 app.use(express.json());
 
 
+// TESTING DB CONNECTION ///////////////////////////////////////////////////////////////
+
+app.get('/db-test', async (req, res) => {
+    try {
+        // Log all environment variables related to DB connection
+        console.log('DB Environment Variables:', {
+            DB_USER: process.env.DB_USER,
+            DB_NAME: process.env.DB_NAME,
+            DB_HOST: process.env.DB_HOST,
+            // IMPORTANT: Do not log DB_PASS
+        });
+
+        const client = await pool.connect();
+        
+        // Try to list ALL tables, not just in public schema
+        const allTables = await client.query(`
+            SELECT schemaname, tablename 
+            FROM pg_tables
+            WHERE schemaname NOT IN ('pg_catalog', 'information_schema')
+        `);
+        
+        // Verify connection details
+        const connectionInfo = await client.query(`
+            SELECT current_database(), current_schema(), version()
+        `);
+        
+        client.release();
+        
+        res.json({
+            connectionDetails: connectionInfo.rows[0],
+            allTables: allTables.rows
+        });
+    } catch (err) {
+        console.error('Detailed DB Test Error:', err);
+        res.status(500).json({ 
+            error: 'Database connection test failed', 
+            details: err.message,
+            stack: err.stack
+        });
+    }
+});
+
+
 // SESSION AND AUTHENTICATION ///////////////////////////////////////////////////////////////
 
 // Configure express-session
@@ -216,8 +259,12 @@ app.get('/players', async (req, res) => {
         const result = await pool.query('SELECT id, name FROM players');
         res.json(result.rows);
     } catch (err) {
-        console.error(err);
-        res.status(500).json({ error: 'Server error' });
+        console.error('Detailed error:', err);
+        res.status(500).json({ 
+            error: 'Server error', 
+            details: err.message,
+            stack: err.stack 
+        });
     }
 });
 

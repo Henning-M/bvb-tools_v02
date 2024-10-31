@@ -34,7 +34,7 @@ function KotcScConfiguration () {
     useEffect(() => {
         const fetchTeams = async () => {
             try {
-                const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/teams');
+                const response = await fetch('https://backend-service-255195242316.us-central1.run.app/teams');
                 const data = await response.json();
                 dispatch(setTeams(data)); // Dispatch action to update teams
             } catch (error) {
@@ -184,7 +184,7 @@ function KotcScConfiguration () {
         
         // Clear existing fixtures in the database
         try {
-            const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/fixtures', {
+            const response = await fetch('https://backend-service-255195242316.us-central1.run.app/fixtures', {
                 method: 'DELETE',
             });
             if(!response.ok) {
@@ -208,7 +208,7 @@ function KotcScConfiguration () {
         }
       
         try {
-          const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/fixtures', {
+          const response = await fetch('https://backend-service-255195242316.us-central1.run.app/fixtures', {
             method: 'PUT',
             headers: {
               'Content-Type': 'application/json',
@@ -231,7 +231,7 @@ function KotcScConfiguration () {
 
     // const handleClearSchedule = async() => {
     // try {
-    //     const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/fixtures', {
+    //     const response = await fetch('https://backend-service-255195242316.us-central1.run.app/fixtures', {
     //         method: 'DELETE',
     //     });
 

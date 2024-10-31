@@ -10,7 +10,7 @@ function Home() {
   // // Function to toggle registration status
   // const toggleRegistrationStatus = async () => {
   //   try {
-  //       const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/feature_states/registration-open/toggle', {
+  //       const response = await fetch('https://backend-service-255195242316.us-central1.run.app/feature_states/registration-open/toggle', {
   //           method: 'POST',
   //       });
   //       const data = await response.json();

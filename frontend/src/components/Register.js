@@ -25,7 +25,7 @@ const handleRegister = async (event) => {
   }
 
   try {
-      const response = await axios.post('https://d3ix2aoqy9cq9s.cloudfront.net/register', {
+      const response = await axios.post('https://backend-service-255195242316.us-central1.run.app/register', {
           username,
           password,
       });

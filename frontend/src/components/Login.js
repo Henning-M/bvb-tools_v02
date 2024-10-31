@@ -19,7 +19,7 @@ function Login() {
         e.preventDefault();
         
         try {
-          const response = await fetch('https://d3ix2aoqy9cq9s.cloudfront.net/login', {
+          const response = await fetch('https://backend-service-255195242316.us-central1.run.app/login', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
