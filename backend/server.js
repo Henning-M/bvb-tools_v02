@@ -17,10 +17,22 @@ const pgSession = require('connect-pg-simple')(session);
 
 
 // Enable CORS
+// CORS configuration
 app.use(cors({
-    origin: 'https://master.d1uok82rtkk8si.amplifyapp.com/', // Your frontend URL / Use http://localhost:3000 for local deployment
-    credentials: true // Allow credentials (cookies) to be sent
+    origin: [
+        'https://kotc-frontend-255195242316.us-central1.run.app',
+        'http://localhost:3000'  // For local development
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+//Previous, more basic version - revert if Claudes suggestion from above fails
+// app.use(cors({
+//     origin: 'https://kotc-frontend-255195242316.us-central1.run.app', // Your frontend URL / Use http://localhost:3000 for local deployment
+//     credentials: true // Allow credentials (cookies) to be sent
+// }));
 
 // Middleware
 app.use(express.json());
